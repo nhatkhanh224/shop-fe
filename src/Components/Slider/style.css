@@ -1,0 +1,64 @@
+.carousel-control-next,
+.carousel-control-prev,
+.carousel-indicators {
+  display: none;
+}
+
+.title {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  transform: translate(5%);
+}
+
+.title > :first-child {
+  font-size: 0.8rem;
+  margin-bottom: 0.7rem;
+}
+
+.title > :nth-child(2) {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.vh100 {
+  height: auto;
+  width: 100%;
+}
+@media (min-width: 400px) {
+  .title > :first-child {
+    font-size: 1rem;
+  }
+
+  .vh100 {
+    height: auto;
+  }
+  .title {
+    transform: translate(10%);
+    top: 20%;
+  }
+}
+@media (min-width: 575px) {
+  .title > :first-child {
+    font-size: 1.2rem;
+  }
+  .vh100 {
+    height: 100vh;
+  }
+  .title > :nth-child(2) {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .title > a {
+    padding: 8px 24px;
+  }
+  .title {
+    top: 50%;
+    transform: translate(20%);
+  }
+
+  .postion {
+    top: -55px;
+  }
+}
