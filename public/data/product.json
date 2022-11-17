@@ -1,0 +1,162 @@
+[
+    {
+        "id":1,
+        "name":"Esprit Ruffle Shirt",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"16.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","White"],
+        "img":"images/product-01.jpg",
+        "category":"women"
+    },
+    {
+        "id":2,
+        "name":"Herschel supply",
+        "supplier":"Herschel supply",
+        "price":"35.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-02.jpg",
+        "category":"women"
+         
+    },
+    {
+        "id":3,
+        "name":"Only Check Trouser",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"16.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","White"],
+        "img":"images/product-03.jpg",
+        "category":"men"
+    },
+    {
+        "id":4,
+        "name":"Classic Trench Coat",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"16.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-04.jpg",
+        "category":"women"
+    },
+    {
+        "id":5,
+        "name":"Front Pocket Jumper",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"16.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-05.jpg",
+        "category":"women"},   
+     {
+        "id":6,
+        "name":"Herschel supply",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"16.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-06.jpg",
+        "category":"accessories"
+    },
+    {
+        "id":7,
+        "name":"Femme T-Shirt In Stripe",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"76.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-07.jpg",
+        "category":"women"
+    },
+    {
+        "id":8,
+        "name":"T-Shirt with Sleeve",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"16.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-08.jpg",
+        "category":"women"
+    },
+    {
+        "id":9,
+        "name":"Pretty Little Thing",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"96.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-09.jpg",
+        "category":"accessories"
+    },
+    {
+        "id":10,
+        "name":"Square Neck Back",
+        "supplier":"Herschel supply",
+        "price":"35.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-10.jpg",
+        "category":"women"
+         
+    },
+    {
+        "id":11,
+        "name":"Lightweight Jacket",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"16.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-11.jpg",
+        "category":"men"
+    },
+    {
+        "id":12,
+        "name":"Lightweight Jacket",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"16.61 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-12.jpg",
+        "category":"accessories"
+    },
+    {
+        "id":13,
+        "name":"Lightweight Jacket",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"16.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-13.jpg",
+        "category":"women"},   
+     {
+        "id":14,
+        "name":"Lightweight Jacket",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"16.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-14.jpg",
+        "category":"women"
+    },
+    {
+        "id":15,
+        "name":"Lightweight Jacket",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"76.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-15.jpg",
+        "category":"accessories"
+    },
+    {
+        "id":16,
+        "name":"Lightweight Jacket",
+        "supplier":"Esprit Ruffle Shirt",
+        "price":"16.64 $",
+        "Size":["Size s","Sizes M","Size L","Size XL"],
+        "color":["Red","Blue","Grey","White"],
+        "img":"images/product-16.jpg",
+        "category":"women"
+    }
+]

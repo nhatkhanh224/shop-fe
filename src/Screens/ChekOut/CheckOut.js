@@ -4,10 +4,14 @@ import { SELECT } from "../../Components/MUI/SELECT";
 import { useSelector, useDispatch } from "react-redux";
 import { REMOVE_FROM_CART } from "../../Redux/Constant/Constant";
 import { useState, useEffect } from "react";
-import _ from 'lodash';
+import _ from "lodash";
+import { useCookies } from "react-cookie";
+import apis from "../../apis";
 export function CheckOut() {
   const dispatch = useDispatch();
+  const [cookies] = useCookies(["cookie-name"]);
   const [checkOutProduct, setCheckOutProduct] = useState([]);
+  const user_id = cookies.user_id;
 
   // const DeletItem = (id) => {
   //   dispatch({ type: REMOVE_FROM_CART, payload: id });
@@ -18,43 +22,71 @@ export function CheckOut() {
   }, []);
   const Total = () => {
     const init = checkOutProduct.reduce((accumulator, object) => {
-      return accumulator + object.qnt * object.price;
+      return accumulator + object.quantity * object.price;
     }, 0);
     return init;
   };
   const getCheckoutProduct = () => {
-    const cartFromLS = JSON.parse(localStorage.getItem("carts"));
-    let hashTable = {};
-    for (let i = 0; i < cartFromLS.length; i++) {
-      if (hashTable[cartFromLS[i].id]) {
-        hashTable[cartFromLS[i].id].qnt += cartFromLS[i].qnt;
-      } else {
-        hashTable[cartFromLS[i].id] = cartFromLS[i];
+    if (user_id) {
+      apis.get(`/cart/${user_id}`).then((res) => {
+        setCheckOutProduct(res.data);
+      });
+    } else {
+      const cartFromLS = JSON.parse(localStorage.getItem("carts")) || [];
+      let hashTable = {};
+      for (let i = 0; i < cartFromLS.length; i++) {
+        if (hashTable[cartFromLS[i].id]) {
+          hashTable[cartFromLS[i].id].qnt += cartFromLS[i].qnt;
+        } else {
+          hashTable[cartFromLS[i].id] = cartFromLS[i];
+        }
       }
+      setCheckOutProduct(Object.values(hashTable));
     }
-    setCheckOutProduct(Object.values(hashTable));
   };
 
-  const handleMinusQnt = (index) => {
-    const itemClone =  _.clone(checkOutProduct);
-    itemClone[index].qnt = itemClone[index].qnt - 1 ;
-    localStorage.setItem('carts', JSON.stringify(itemClone));
-    getCheckoutProduct();
-  }
+  const handleMinusQnt = async (index, product_id) => {
+    if (user_id) {
+      await apis
+        .post(`/cart/minusQuantity`, {
+          user_id,
+          product_id,
+        })
+        .then((res) => {
+          getCheckoutProduct();
+        });
+    } else {
+      const itemClone = _.clone(checkOutProduct);
+      itemClone[index].quantity = itemClone[index].quantity - 1;
+      localStorage.setItem("carts", JSON.stringify(itemClone));
+      getCheckoutProduct();
+    }
+  };
 
-  const handlePlusQnt = (index) => {
-    const itemClone =  _.clone(checkOutProduct);
-    itemClone[index].qnt = itemClone[index].qnt + 1 ;
-    localStorage.setItem('carts', JSON.stringify(itemClone));
-    getCheckoutProduct();
-  }
+  const handlePlusQnt = async (index, product_id) => {
+    if (user_id) {
+      await apis
+        .post(`/cart/plusQuantity`, {
+          user_id,
+          product_id,
+        })
+        .then((res) => {
+          getCheckoutProduct();
+        });
+    } else {
+      const itemClone = _.clone(checkOutProduct);
+      itemClone[index].quantity = itemClone[index].quantity + 1;
+      localStorage.setItem("carts", JSON.stringify(itemClone));
+      getCheckoutProduct();
+    }
+  };
 
   const handleDelete = (index) => {
-    const itemClone =  _.clone(checkOutProduct);
-    itemClone.splice(index, 1)
-    localStorage.setItem('carts', JSON.stringify(itemClone));
+    const itemClone = _.clone(checkOutProduct);
+    itemClone.splice(index, 1);
+    localStorage.setItem("carts", JSON.stringify(itemClone));
     getCheckoutProduct();
-  }
+  };
 
   return (
     <>
@@ -67,40 +99,52 @@ export function CheckOut() {
                 <tr>
                   <td>PRODUCT</td>
                   <td> </td>
-                  <td>Color</td>
                   <td>Size</td>
-                  <td>Qnt</td>
+                  <td>Quantity</td>
                   <td>Price</td>
                   <td>Total</td>
                 </tr>
                 {/* end Header tabel*/}
 
                 {/* start  display ceckout proddut */}
-                {checkOutProduct.map((e,index) => {
+                {checkOutProduct.map((e, index) => {
                   return (
                     <tr key={e.id}>
                       <td>
-                        <img src={e.img} alt="Product img"></img>
+                        <img src={e.thumbnail} alt="Product img"></img>
                       </td>
                       <td>{e.title}</td>
-                      <td>{e.Color}</td>
-                      <td>{e.Size}</td>
+                      <td>{e.size}</td>
                       <td>
-                        {e.qnt > 1 && <button className="" style={{ marginRight: "10px" }} onClick={()=>{handleMinusQnt(index)}}>
-                          <span style={{ fontSize: "20px"}}>-</span>
-                        </button>}
-                        <span>{e.qnt}</span>
-                        <button className="" style={{ marginLeft: "10px" }} onClick={()=>{handlePlusQnt(index)}}>
+                        {e.quantity > 1 && (
+                          <button
+                            className=""
+                            style={{ marginRight: "10px" }}
+                            onClick={() => {
+                              handleMinusQnt(index, e.id);
+                            }}
+                          >
+                            <span style={{ fontSize: "20px" }}>-</span>
+                          </button>
+                        )}
+                        <span>{e.quantity}</span>
+                        <button
+                          className=""
+                          style={{ marginLeft: "10px" }}
+                          onClick={() => {
+                            handlePlusQnt(index, e.id);
+                          }}
+                        >
                           <span style={{ fontSize: "20px" }}>+</span>
                         </button>
                       </td>
                       <td>{e.price}</td>
-                      <td>{parseFloat(e.price) * parseFloat(e.qnt)}</td>
+                      <td>{parseFloat(e.price) * parseFloat(e.quantity)} đ</td>
                       <td>
                         <i
                           onClick={() => handleDelete(index)}
                           className="fas fa-trash-alt"
-                          style={{cursor: "pointer"}}
+                          style={{ cursor: "pointer" }}
                         ></i>
                       </td>
                     </tr>
@@ -113,23 +157,25 @@ export function CheckOut() {
             <h4>CART TOTAL</h4>
             <div>
               <div>SubTotal</div>
-              <div>{Total()}</div>
+              <div>{Total()} đ</div>
             </div>
-            {checkOutProduct.length === 0 && <div>
-              <div>Shipping</div>
+            {checkOutProduct.length === 0 && (
               <div>
-                <p>
-                  There are no shipping methods available. Please double check
-                  your address, or contact us if you need any help.
-                </p>
-                <span>CALCULATION SHIPPING</span>
-                <SELECT
-                  label={"country"}
-                  options={["USA", "Jordan", "KSA"]}
-                  returnVal={(val) => val}
-                ></SELECT>
+                <div>Shipping</div>
+                <div>
+                  <p>
+                    There are no shipping methods available. Please double check
+                    your address, or contact us if you need any help.
+                  </p>
+                  <span>CALCULATION SHIPPING</span>
+                  <SELECT
+                    label={"country"}
+                    options={["USA", "Jordan", "KSA"]}
+                    returnVal={(val) => val}
+                  ></SELECT>
+                </div>
               </div>
-            </div>}
+            )}
           </CartTotals>
         </CheckOutStyle>
       ) : (

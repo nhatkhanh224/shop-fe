@@ -7,7 +7,7 @@ import { reducers } from "./Redux/Reducers/combineReducers";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
 import thunk from "redux-thunk";
-// import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const store = createStore(reducers, applyMiddleware(thunk));
 ReactDOM.render(

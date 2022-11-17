@@ -63,22 +63,39 @@ export const addToCart = (option) => {
       const { data } = await axios.get(
         `http://localhost:3000/api/productDetail/${option.id}`
       );
-      const dataCartExits = JSON.parse(localStorage.getItem('carts')) || [];
       const dataCart = {
         id: option.id,
         Color: option.Color,
-        Size: option.Size,
-        qnt: option.qnt,
+        size: option.Size,
+        quantity: option.qnt,
         price: data.price,
-        img: data.thumbnail,
+        thumbnail: data.thumbnail,
         name: data.name,
+        user_id: option.user_id || ""
+      };
+      if (option.user_id) {
+        await axios.post(
+          `http://localhost:3000/api/addToCart`,{dataCart}
+        ).then((res)=>{
+          try {
+            console.log(res);
+            dispatch({
+              type: ADD_TO_CART_SUCCESS,
+              payload: dataCart,
+            });
+          } catch (error) {
+            console.log(error);
+          }
+        })
+      } else {
+        const dataCartExits = JSON.parse(localStorage.getItem("carts")) || [];
+        dataCartExits.push(dataCart);
+        localStorage.setItem("carts", JSON.stringify(dataCartExits));
+        dispatch({
+          type: ADD_TO_CART_SUCCESS,
+          payload: dataCart,
+        });
       }
-      dispatch({
-        type: ADD_TO_CART_SUCCESS,
-        payload: dataCart,
-      });
-      dataCartExits.push(dataCart)
-      localStorage.setItem('carts', JSON.stringify(dataCartExits));
     } catch (error) {
       dispatch({ type: ADD_TO_CART_FAIL, payload: error });
     }

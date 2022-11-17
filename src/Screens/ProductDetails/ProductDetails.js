@@ -11,12 +11,14 @@ import { CircularLading } from "../../Components/MUI/CircularLading";
 import { getProductWithIdAction } from "../../Redux/Actions/Action";
 import { Rating } from "../../Components/Rating/Rating";
 import { addToCart } from "../../Redux/Actions/Action";
+import { useCookies } from "react-cookie";
 export function ProductDetails() {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [cookies] = useCookies(['cookie-name']);
+  const user_id = cookies.user_id;
   const [error, setError] = useState(false);
   const { loading, product } = useSelector((state) => state.SingleProduct);
-  console.log(product);
   const { loading: LoadingToAddProduct } = useSelector(
     (state) => state.addToCart
   );
@@ -25,11 +27,11 @@ export function ProductDetails() {
     Color: "",
     Size: "",
     qnt: 1,
+    user_id: user_id || ""
   });
 
   useEffect(
     () => dispatch(getProductWithIdAction(id)),
-
     [dispatch, id]
   );
 
