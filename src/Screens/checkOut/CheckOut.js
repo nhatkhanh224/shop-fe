@@ -7,6 +7,8 @@ import { useState, useEffect } from "react";
 import _ from "lodash";
 import { useCookies } from "react-cookie";
 import apis from "../../apis";
+// import { Button } from "@mui/material";
+import { Button } from "../../Components/btn/Button";
 export function CheckOut() {
   const dispatch = useDispatch();
   const [cookies] = useCookies(["cookie-name"]);
@@ -111,7 +113,7 @@ export function CheckOut() {
                   return (
                     <tr key={e.id}>
                       <td>
-                        <img src={e.thumbnail} alt="Product img"></img>
+                        <img src={`http://localhost:3000/${e.thumbnail}`} alt="Product img"></img>
                       </td>
                       <td>{e.title}</td>
                       <td>{e.size}</td>
@@ -159,7 +161,7 @@ export function CheckOut() {
               <div>SubTotal</div>
               <div>{Total()} đ</div>
             </div>
-            {checkOutProduct.length === 0 && (
+           {checkOutProduct.length === 0 && (
               <div>
                 <div>Shipping</div>
                 <div>
@@ -169,13 +171,17 @@ export function CheckOut() {
                   </p>
                   <span>CALCULATION SHIPPING</span>
                   <SELECT
-                    label={"country"}
-                    options={["USA", "Jordan", "KSA"]}
+                    label={"city"}
+                    options={["DaNang", "HCM", "HaNoi"]}
                     returnVal={(val) => val}
                   ></SELECT>
                 </div>
+                <div>Total: {Total()} đ</div>
               </div>
             )}
+            <Button
+              value="CheckOut"
+            ></Button>
           </CartTotals>
         </CheckOutStyle>
       ) : (

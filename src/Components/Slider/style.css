@@ -1,14 +1,23 @@
 .carousel-control-next,
 .carousel-control-prev,
 .carousel-indicators {
-  display: none;
+  display: block;
+  z-index: 999;
 }
 
 .title {
   position: absolute;
   top: 10%;
-  left: 0;
-  transform: translate(5%);
+  left: 50px;
+  transform: translate(50%);
+}
+
+@media (max-width: 739px){
+  .title{
+    top: 20%;
+    left: 30px;
+    transform: translate(0%);
+  }
 }
 
 .title > :first-child {
@@ -55,10 +64,10 @@
   }
   .title {
     top: 50%;
-    transform: translate(20%);
+    transform: translate(30%);
   }
 
   .postion {
-    top: -55px;
+    top: -80px;
   }
 }

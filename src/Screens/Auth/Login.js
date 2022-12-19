@@ -2,6 +2,8 @@ import React, { useEffect, useState} from "react";
 import {useNavigate} from 'react-router-dom'
 import { useCookies } from "react-cookie";
 import apis from "../../apis";
+import { Auth } from "./Styled.js";
+
 export function Login() {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
@@ -25,16 +27,20 @@ export function Login() {
         }
       });
   };
+
+  
   return (
     <>
-      <div className="container">
+      <Auth className="container">
         <form>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
+          <h4>Login</h4>  
+          <div class="form-group mt-2 ">
+            <label htmlFor="email">Email address</label>
             <input
               type="email"
-              class="form-control"
-              id="exampleInputEmail1"
+              className="form-control"
+              id="email"
+              name="email"
               aria-describedby="emailHelp"
               placeholder="Enter email"
               onChange={(e) => {
@@ -43,12 +49,13 @@ export function Login() {
             />
           </div>
           <div class="form-group mt-2">
-            <label for="exampleInputPassword1">Password</label>
+            <label htmlFor="password">Password</label>
             <input
               type="password"
-              class="form-control"
-              id="exampleInputPassword1"
-              placeholder="Password"
+              className="form-control"
+              id="password"
+              name="password"
+              placeholder="Enter Password"
               onChange={(e) => {
                 setAccount({ ...account, password: e.target.value });
               }}
@@ -56,13 +63,17 @@ export function Login() {
           </div>
           <button
             type="button"
-            class="btn btn-primary mt-2"
+            className="btn btn-primary mt-2"
             onClick={handleLogin}
           >
-            Submit
+            Login
           </button>
+          <div className="form-bottom">
+            <span>Forgot password?</span>
+            <a href="./forgotpass">Click Here!</a>
+          </div>
         </form>
-      </div>
+      </Auth>
     </>
   );
 }

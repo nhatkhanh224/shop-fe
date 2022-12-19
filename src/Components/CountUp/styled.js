@@ -5,13 +5,14 @@ export const Counter = styled.div`
   gap: 10px;
   font-size: 1.5rem;
   align-items: center;
+  justify-content: center;
   & > button {
     font-size: 1.5rem;
     border: 1px solid ${({ theme }) => theme.color};
     width: 30px;
     height: 30px;
     color: ${({ theme }) => theme.color};
-
+    
     &:hover {
       background-color: ${mainColor.purple};
       border: none;

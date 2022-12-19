@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { mainColor } from "../../Shared/Theme";
 
 export const Contactt = styled.div``;
 
@@ -66,7 +67,7 @@ export const EmailBox = styled.div`
       & > input[type="email"] {
         //input email
         width: 100%;
-        height: 40px;
+        height: 50px;
         background-color: transparent;
         padding: 0 0 0 45px;
         font-size: 1rem;
@@ -79,7 +80,7 @@ export const EmailBox = styled.div`
 
     & > :nth-child(2) {
       //txt area
-      width: 70%;
+      width: calc(74% + 1px);
       min-height: 75px;
       height: 75px;
       background-color: transparent;
@@ -97,6 +98,21 @@ export const EmailBox = styled.div`
 
     & > :nth-child(3) {
       //submit btn
+      width: calc(73% + 1px);
+      display: flex;
+      justify-content: center;
+      & > input{
+        color: #fff;
+        background-color: #000;
+        width: 100%;
+        &:hover{
+          color: #fff;
+          background-color: ${mainColor.purple};
+          overflow: hidden;
+        }
+      }
+
+      
     }
   }
 `;
@@ -108,7 +124,7 @@ export const AdressBox = styled.div`
   gap: 40px;
   padding: 20px 0;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
   & > div {
     //box
     display: flex;
@@ -119,6 +135,10 @@ export const AdressBox = styled.div`
       display: flex;
       flex-direction: column;
       gap: 10px;
+      & > a{
+        text-decoration: none
+        
+      }
     }
   }
 `;

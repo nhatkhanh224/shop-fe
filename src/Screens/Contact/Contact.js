@@ -29,8 +29,7 @@ export function Contact() {
               <div>
                 <h4>Address</h4>
                 <p>
-                  Coza Store Center 8th floor, 379 Hudson St, New York, NY 10018
-                  US
+                  Khu Đô thị Đại học Đà Nẵng, Đường Nam Kỳ Khởi Nghĩa, quận Ngũ Hành Sơn, TP. Đà Nẵng
                 </p>
               </div>
             </div>
@@ -38,14 +37,15 @@ export function Contact() {
               <i className="fas fa-phone-alt"></i>
               <div>
                 <h4>Lets Talk</h4>
-                <a href="tel:0796918885">962796918885</a>
+                <a href="tel:1234567890">1234567890</a>
               </div>
             </div>
             <div>
               <i className="far fa-envelope"></i>
               <div>
                 <h4>Sale Support</h4>
-                <a href="mailto:omar.hija12@gmail.com">omar.hija12@gmail.com</a>
+                <a href="nnkhanh.18it5@vku.udn.vn">nnkhanh.18it5@vku.udn.vn</a>
+                <a href="bvahuy.18it5@vku.udn.vn">bvahuy.18it5@vku.udn.vn</a>
               </div>
             </div>
           </AdressBox>

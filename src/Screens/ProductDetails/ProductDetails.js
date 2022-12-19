@@ -37,8 +37,16 @@ export function ProductDetails() {
 
   const image = [
     {
-      original: product.thumbnail,
-      thumbnail: product.thumbnail,
+      original: `http://localhost:3000/${product.thumbnail}`,
+      thumbnail: `http://localhost:3000/${product.thumbnail}`,
+    },
+    {
+      original: `http://localhost:3000/${product.thumbnail}`,
+      thumbnail: `http://localhost:3000/${product.thumbnail}`,
+    },
+    {
+      original: `http://localhost:3000/${product.thumbnail}`,
+      thumbnail: `http://localhost:3000/${product.thumbnail}`,
     },
   ];
 
@@ -72,6 +80,7 @@ export function ProductDetails() {
                 showPlayButton={false}
                 autoPlay={true}
               />
+              
 
               <Details>
                 <h4>{product.name}</h4>

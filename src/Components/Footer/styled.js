@@ -6,111 +6,137 @@ export const FOOTER = styled.footer`
   padding: 20px 0;
   & > :first-child {
     color: white;
-
     display: flex;
-    gap: 28px;
-    flex-direction: column;
-    position: relative;
     bottom: 0;
     @media (min-width: 676px) {
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: space-between;
     }
+    & > .row{
+      & > div:last-child{
+        padding-top: 40px;
+      }
+    }
   }
 `;
 export const Categories = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  padding-bottom: 50px;
+  & > h4 {
+    padding-bottom: 30px;
+    margin: 0;
+  }
+  & > ul {
+    padding: 0;
+    & > li {
+      padding-bottom: 10px;
+      & > a{
+        text-decoration: none;
+        font-size: 13px;
+        line-height: 1.923;
+        color: #b2b2b2;
+      }
+    }
+  }
+`;
 
-  & > a {
-    :hover {
-      color: ${mainColor.purple};
+export const Contact = styled.div`
+  padding-bottom: 50px;
+  & > h4 {
+    padding-bottom: 30px;
+    margin: 0;
+  }
+  & > ul {
+    padding: 0;
+    & > li {
+      padding-bottom: 10px;
+      & > a{
+        text-decoration: none;
+        font-size: 24px;
+        color: #b2b2b2;
+      }
     }
   }
 `;
 
 export const GetIntouch = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 0.5 0;
-  gap: 1rem;
-  justify-content: center;
-
-  & > p {
-    line-height: 1.8rem;
-    flex: 0 0 50%;
-  }
-`;
-
-export const Contact = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-
+  padding-bottom: 50px;
   & > h4 {
-    flex: 0 0 100%;
-    margin-bottom: 20px;
+    padding-bottom: 30px;
+    margin: 0;
   }
-  & > a {
-    font-size: 2.2rem;
-    margin-right: 20px;
-
-    :hover {
-      color: ${mainColor.purple};
+    & > p{
+      font-size: 13px;
+      line-height: 1.923;
+      color: #b2b2b2;
+      max-width: 270px;
     }
   }
 `;
+
+
 
 export const Newsletter = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  & > form {
-    display: flex;
-    gap: 5%;
+  padding-bottom: 50px;
+  & > h4 {
+    padding-bottom: 30px;
+    margin: 0;
+  }
 
-    & > [type="email"] {
-      width: 67%;
-      height: 28px;
-      padding: 0 6px;
-      font-size: 1.2rem;
-      color: ${mainColor.purple};
-      background: none;
-      border: none;
-      border-bottom: 1px solid ${mainColor.purple};
-      :focus {
-        outline: none;
+  & > form{
+    & > div:nth-child(1){
+      width: 100%;
+      position: relative;
+      border-bottom: 2px solid rgba(204,204,204, 0.1);
+      padding-bottom: 4px;
+      & > input {
+        background-color: transparent;
+        width: 100%;
+        font-size: 13px;
+        line-height: 1.923;
+        color: #b2b2b2;
+        border: none;
+      }
+      & > div {
+        position: absolute;
+        width: 0%;
+        height: 2px;
+        background-color: #6774d5;
+        left: 0;
+        bottom: -2px;
       }
     }
-    .Submit {
-      font-size: 0.8rem;
+
+    & > div:nth-child(2){
+      padding-top: 18px;
     }
-  }
-  &h4 > {
-    flex: 0 0 100%;
   }
 `;
 
 export const Copyright = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  & > :first-child {
+  & > div {
     display: flex;
     justify-content: center;
-    gap: 10px;
-  }
-
-  & > :last-child {
-    padding: 20px 0;
-    text-align: center;
-    .color {
-      color: ${mainColor.purple};
+    -ms-align-items: center;
+    align-items: center;
+    padding-bottom: 18px;
+    & > img{
+      height: 24px;
+      width: 36px;
     }
   }
 
-  @media (min-width: 676px) {
-    flex: 0 0 100%;
+  & > p {
+    font-size: 13px;
+    line-height: 1.923;
+    color: #666;
+    text-align: center;
+
+    & > a {
+      margin-left: 2px;
+      text-decoration: none;
+      
+    }
+
   }
 `;

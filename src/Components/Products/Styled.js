@@ -5,6 +5,10 @@ export const Products = styled.div`
   //Start Component
   & > div {
     & > h2 {
+      font-size: 36px;
+      line-height: 1.1;
+      text-transform: uppercase;
+      margin-top: 12px;
     }
     .ShowMoreBtn {
       display: flex;
@@ -17,7 +21,7 @@ export const Filters = styled.div`
   padding-top: 30px;
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 40px;
 
   & > :first-child {
     //Filter Type
@@ -34,7 +38,7 @@ export const Filters = styled.div`
       @media (min-width: 575px) {
         //medium and up screen
         margin-right: 1rem;
-        font-size: 1.2rem;
+        font-size: 1rem;
         font-weight: 400;
       }
       &:hover {
@@ -48,10 +52,12 @@ export const Filters = styled.div`
     font-size: 0.8rem;
 
     & > button {
-      margin-right: 10px;
+      position: relative;
+      // margin-right: 10px;
       padding: 12px 10px;
       border: 1px solid ${({ theme }) => theme.color};
-
+      width: 120px;
+      
       &::before {
         padding-right: 10px;
       }
@@ -59,7 +65,8 @@ export const Filters = styled.div`
         background-color: ${mainColor.purple};
         color: white;
         border-color: transparent;
-      }
+        width: 120px;
+      } 
     }
   }
 
@@ -76,7 +83,7 @@ export const Search = styled.div`
   border: 1px solid ${({ theme }) => theme.color};
   margin: 40px auto 0;
   transition: all 3s;
-  display: none;
+  display: block;
 
   & > i {
     position: absolute;
@@ -92,7 +99,8 @@ export const Search = styled.div`
     width: 100%;
     color: ${({ theme }) => theme.color};
     background-color: transparent;
-    height: 30px;
+    height: 40px;
+    border-radius: 2px;
     :focus {
       border: none;
       outline: none;
@@ -105,16 +113,19 @@ export const Search = styled.div`
 
 export const Cards = styled.div`
   display: grid;
-  justify-content: center;
-  gap: 15px;
+  justify-content: space-between;
+  gap: 20px;
   padding-top: 40px;
   grid-template-columns: repeat(auto-fit, minmax(250px, 250px));
+  
 
   & > a {
-    border: 2px solid ${mainColor.purple};
+    border: 2px solid #ccc;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
+    height: 450px;
+    border-radius: 4px;
     & > :first-child {
       position: relative;
       overflow: hidden;
@@ -151,8 +162,10 @@ export const Cards = styled.div`
     &:hover > :first-child img {
       transform: scale(1.1);
     }
-
-    & > :nth-child(2) {
+    & > :nth-child(2){
+      border: 1px solid #ccc;
+    }
+    & > :nth-child(3) {
       padding: 0 20px;
       text-align: start;
       font-size: 1rem;
@@ -167,4 +180,5 @@ export const btnLoadMore = css`
   &.m-y {
     margin: auto;
   }
+  
 `;

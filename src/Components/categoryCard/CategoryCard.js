@@ -16,7 +16,7 @@ export function CategoryCard() {
   }, []);
   return (
     <Card>
-      <div className="container">
+      <div className="container ">
       {categories.map((item)=>{
         return <Link to="/CozaStore/Shop">
           <img

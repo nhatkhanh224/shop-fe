@@ -10,7 +10,7 @@ export const Card = styled.div`
     display: grid;
     justify-items: center;
     grid-template-columns: repeat(auto-fit, minmax(250px, 350px));
-    gap: 15px;
+    gap: 40px;
     justify-content: center;
 
     //start Styled Link
@@ -21,6 +21,7 @@ export const Card = styled.div`
       transition: all 0.2s;
       overflow: hidden;
       border: 1px solid ${({ theme }) => theme.color};
+      
       &::before {
         //To show the color purple when hover
         content: " ";

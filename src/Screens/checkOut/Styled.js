@@ -6,7 +6,7 @@ export const CartTotals = styled.div`
   width: 100%;
   & > h4 {
     font-size: 1.2rem;
-    padding: 10px;
+    padding: 10px 10px 10px 0;
     margin-bottom: 10px;
     border-bottom: 1px solid;
   }
@@ -19,19 +19,23 @@ export const CartTotals = styled.div`
     border-bottom: 1px solid;
   }
 
-  & > :nth-child(3) {
-    display: flex;
-    gap: 40px;
-
-    & > :nth-child(2) {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      & > p {
-        line-height: 1.5rem;
-      }
-    }
+  & > :last-child{
+    text-align: center;
   }
+  // & > :nth-child(3) {
+  //   display: flex;
+  //   gap: 40px;
+
+  //   & > :nth-child(2) {
+  //     display: flex;
+  //     flex-direction: column;
+  //     gap: 10px;
+  //     & > p {
+  //       line-height: 1.5rem;
+  //     }
+  //   }
+  // }
+
 `;
 export const TotalProducts = styled.div`
   overflow: auto;
@@ -47,6 +51,9 @@ export const TotalProducts = styled.div`
       width: 100%;
     }
     & > tbody tr {
+      // display: flex;
+      // justify-content: space-between;
+      // align-items: center;
       text-align: center;
       border-bottom: 1px solid;
       & > td {
@@ -54,7 +61,7 @@ export const TotalProducts = styled.div`
         & > img {
           width: 40px;
           position: relative;
-          top: 20px;
+          // top: 20px;
         }
         @media (min-width: 676px) {
           padding: 15px;

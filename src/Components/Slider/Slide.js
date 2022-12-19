@@ -29,7 +29,7 @@ export function Slide() {
       interval="3000"
       navButtonsProps={{
         style: {
-          display: "none",
+          display: "block",
         },
       }}
       indicatorIconButtonProps={{
@@ -45,7 +45,7 @@ export function Slide() {
             <div>{e.mainTitle}</div>
             <div>{e.subTitle}</div>
 
-            <LinkBtn to="/CozaStore/Shop"> Shope Now</LinkBtn>
+            <LinkBtn to="/CozaStore/Shop">Shop Now</LinkBtn>
           </div>
         </div>
       ))}

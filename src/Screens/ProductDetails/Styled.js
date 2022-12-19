@@ -4,17 +4,17 @@ export const PRODUCTDETAILS = styled.div`
   & > :first-child {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 40px;
+    gap: 20px;
     .slider-MW {
       max-width: 550px;
-      padding: 20px;
+      padding: 10px;
     }
 
     @media (min-width: 992px) {
-      padding: 0 150px;
+      padding: 0 100px;
     }
     @media (min-width: 1200px) {
-      padding: 0 200px;
+      padding: 0 100px;
     }
   }
   @media (min-width: 570px) {
@@ -36,10 +36,10 @@ export const Details = styled.div`
   border: 1px solid ${mainColor.purple};
   padding: 35px;
   font-size: 1rem;
+  justify-content: center;
   @media (min-width: 997px) {
     font-size: 1rem;
   }
-
   & > h4,
   > p,
   > span {
@@ -51,6 +51,18 @@ export const Details = styled.div`
   > :nth-child(7),
   > :nth-child(8) {
     margin: auto;
+  }
+  & > :nth-child(7){
+    .btnStyle{
+      width: 140px;
+      justify-content: center;
+      display: flex;
+    }
+  }
+  & > div {
+    &:last-child{
+      text-align: center;
+    }
   }
 `;
 
