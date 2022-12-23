@@ -13,6 +13,7 @@ export function CheckOut() {
   const dispatch = useDispatch();
   const [cookies] = useCookies(["cookie-name"]);
   const [checkOutProduct, setCheckOutProduct] = useState([]);
+  console.log(checkOutProduct);
   const user_id = cookies.user_id;
 
   // const DeletItem = (id) => {

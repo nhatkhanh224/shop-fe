@@ -16,9 +16,10 @@ export function ProductDetails() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [cookies] = useCookies(['cookie-name']);
-  const user_id = cookies.user_id;
+  const user_id = Number(cookies.user_id);
   const [error, setError] = useState(false);
   const { loading, product } = useSelector((state) => state.SingleProduct);
+  console.log(product);
   const { loading: LoadingToAddProduct } = useSelector(
     (state) => state.addToCart
   );
@@ -29,30 +30,54 @@ export function ProductDetails() {
     qnt: 1,
     user_id: user_id || ""
   });
+  console.log(option);
+  const [image, setImage] = useState([]);
+  const [size, setSize] = useState([]);
+  const [color, setColor] = useState([]);
 
   useEffect(
     () => dispatch(getProductWithIdAction(id)),
     [dispatch, id]
   );
+  useEffect(() => {
+    if (product.subImages) {
+      let array = [
+        {
+          original: `http://localhost:3000/${product.thumbnail}`,
+          thumbnail: `http://localhost:3000/${product.thumbnail}`,
+        }
+      ]
+      for (let i = 0; i < product?.subImages.length; i++) {
+        const element = product.subImages[i];
+        array.push({
+          original: `http://localhost:3000/${element.image}`,
+          thumbnail: `http://localhost:3000/${element.image}`,
+        })
+      }
+      setImage(array)
+    }
+  }, [product]);
 
-  const image = [
-    {
-      original: `http://localhost:3000/${product.thumbnail}`,
-      thumbnail: `http://localhost:3000/${product.thumbnail}`,
-    },
-    {
-      original: `http://localhost:3000/${product.thumbnail}`,
-      thumbnail: `http://localhost:3000/${product.thumbnail}`,
-    },
-    {
-      original: `http://localhost:3000/${product.thumbnail}`,
-      thumbnail: `http://localhost:3000/${product.thumbnail}`,
-    },
-  ];
+  useEffect(() => {
+    if (product.properties) {
+      let arraySize = [];
+      let arrayColor = [];
+      for (let i = 0; i < product.properties.length; i++) {
+        const element = product.properties[i];
+        if (!arraySize.includes(element.size)) {
+          arraySize.push(element.size)
+        }
+        if (!arrayColor.includes(element.color)) {
+          arrayColor.push(element.color)
+        }
+      }
+     setSize(arraySize);
+     setColor(arrayColor);
+    }
+  }, [product]);
 
   const handelOption = (val, type) => {
     setError(false);
-
     setOption({ ...option, [type]: val });
   };
 
@@ -91,13 +116,13 @@ export function ProductDetails() {
                   <SELECT
                     id="Size"
                     label={"Size"}
-                    options={["S", " M", "L", "XL"]}
+                    options={size}
                     returnVal={(val) => handelOption(val, "Size")}
                   ></SELECT>
                   <SELECT
                     id="Color"
                     label={"Color"}
-                    options={["Red", "Blue", "White", "Grey"]}
+                    options={color}
                     returnVal={(val) => handelOption(val, "Color")}
                   ></SELECT>
                 </Select>

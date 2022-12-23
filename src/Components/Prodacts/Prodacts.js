@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { listProductAction } from "../../Redux/Actions/Action";
 import Skeleton from "@mui/material/Skeleton";
 import { Rating } from "../Rating/Rating";
-import apis from '../../apis';
+import apis from "../../apis";
+import Form from "react-bootstrap/Form";
 
 export function Prodacts(props) {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ export function Prodacts(props) {
   const [limit, setLimit] = useState(4);
   const [type, setType] = useState("");
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   //func search box
 
   useEffect(() => {
@@ -23,11 +25,22 @@ export function Prodacts(props) {
     getCategories();
   }, [dispatch]);
 
+  useEffect(()=>{
+    if (activeFilter && activeFilter !== "All Products") {
+      getSubCategories();
+    }
+  },[activeFilter])
+
   //function btn filter
   const handelFilter = (e) => {
     const category = e.target.dataset.category;
     setType(category);
     setActiveFilter(category);
+    dispatch(listProductAction(category, limit));
+  };
+  const handelFilterSubCategory = (e) => {
+    const category = e.target.value;
+    setType(category);
     dispatch(listProductAction(category, limit));
   };
 
@@ -38,10 +51,14 @@ export function Prodacts(props) {
   };
 
   const getCategories = () => {
-    apis.get('/category')
-    .then(res => {
-      setCategories(res.data)
-    })
+    apis.get("/category/0").then((res) => {
+      setCategories(res.data);
+    });
+  };
+  const getSubCategories = () => {
+    apis.get(`/category/${activeFilter}`).then((res) => {
+      setSubCategories(res.data);
+    });
   }
 
   // func. jsx => display data
@@ -52,10 +69,20 @@ export function Prodacts(props) {
           {(loading ? Array.from(new Array(12)) : data).map((e, i) => (
             <>
               {e ? (
-                <Link to={`/CozaStore/ProductDetails/${e.id}`} key={e.id} className="col-sm-6 col-md-4 col-lg-3 p-b-35">
+                <Link
+                  to={`/CozaStore/ProductDetails/${e.id}`}
+                  key={e.id}
+                  className="col-sm-6 col-md-4 col-lg-3 p-b-35"
+                >
                   <div>
-                    <img src={`http://localhost:3000/${e.thumbnail}`} alt="img" />
-                    <Button customClass="Quickbutton" value="QUICK VIEW"></Button>
+                    <img
+                      src={`http://localhost:3000/${e.thumbnail}`}
+                      alt="img"
+                    />
+                    <Button
+                      customClass="Quickbutton"
+                      value="QUICK VIEW"
+                    ></Button>
                   </div>
                   <div>
                     {/* <h4>{}</h4> */}
@@ -78,8 +105,15 @@ export function Prodacts(props) {
           ))}
         </div>
       </Cards>
-      <div style={{ width: "0", margin: "20px auto", display: 'flex', justifyContent: 'center'}}>
-        <Button 
+      <div
+        style={{
+          width: "0",
+          margin: "20px auto",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Button
           customClass="m-y"
           value="Load More"
           onClick={handleLimitation}
@@ -96,24 +130,25 @@ export function Prodacts(props) {
           {/*//Filter Type} */}
           <span
             data-category=""
-            className={activeFilter === "All Products" ? "active" : ""}
+            className={activeFilter === "All Products" || activeFilter === "" ? "active" : ""}
             onClick={handelFilter}
           >
             All Products
           </span>
-          {
-            categories && categories.map((item,index)=>{
-              return <span
-            key={item.id}
-            data-category={item.id}
-            className={activeFilter === item.id ? "active" : ""}
-            onClick={handelFilter}
-          >
-            {item.name}
-          </span>
-            })
-          }
-          
+          {categories &&
+            categories.map((item, index) => {
+              return (
+                <span
+                  key={item.id}
+                  data-category={item.id}
+                  className={activeFilter == item.id ? "active" : ""}
+                  onClick={handelFilter}
+                >
+                  {item.name}
+                </span>
+              );
+            })}
+
           {/* <span
             data-category="men's clothing"
             className={activeFilter === "men's clothing" ? "active" : ""}
@@ -136,20 +171,24 @@ export function Prodacts(props) {
             Electronics
           </span> */}
         </div>
-        { <div>
-          <button
-            onClick={() => setToggleFilter(!toggleFilter)}
-            className={!toggleFilter ? "fas fa-search" : " fas fa-times"}
-          >
-            Search
-          </button>
-        </div> }
+        {
+          <div>
+            <button
+              onClick={() => setToggleFilter(!toggleFilter)}
+              className={!toggleFilter ? "fas fa-search" : " fas fa-times"}
+            >
+              Search
+            </button>
+          </div>
+        }
       </Filters>
 
-      { <Search className={toggleFilter ? "show" : ""}>
-        <i className="fas fa-search"></i>
-        <input type="search" placeholder="Search here !"></input>
-      </Search> }
+      {
+        <Search className={toggleFilter ? "show" : ""}>
+          <i className="fas fa-search"></i>
+          <input type="search" placeholder="Search here !"></input>
+        </Search>
+      }
     </>
   );
 
@@ -159,6 +198,32 @@ export function Prodacts(props) {
         <div className="container">
           <h2>PRODUCT OVERVIEW</h2>
           {Filter()}
+          {activeFilter!="All Products" && <div className="d-flex">
+            <div className="m-l-2">
+              <Form.Select aria-label="Default select example" onChange={(e)=>{handelFilterSubCategory(e)}}>
+                <option disabled>Sub categories</option>
+                {subCategories && subCategories.map((item)=>{
+                  return <option value={item.id}>{item.name}</option>
+                })}
+              </Form.Select>
+            </div>
+            <div className="ml-2">
+              <Form.Select aria-label="Default select example">
+                <option>Color</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </Form.Select>
+            </div>
+            <div className="ml-2">
+              <Form.Select aria-label="Default select example">
+                <option>Sort</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </Form.Select>
+            </div>
+          </div>}
           {displayProduct()}
         </div>
       </Products>

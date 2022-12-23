@@ -73,6 +73,7 @@ export const addToCart = (option) => {
         name: data.name,
         user_id: option.user_id || ""
       };
+      console.log('DATA CART',dataCart);
       if (option.user_id) {
         await axios.post(
           `http://localhost:3000/api/addToCart`,{dataCart}
