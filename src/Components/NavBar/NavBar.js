@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Topbar, Header, Logo, Bar, ShopIcons } from "./styled";
 import { useSelector, useDispatch } from "react-redux";
 import { themeAction } from "../../Redux/Actions/Action";
 import { color } from "@mui/system";
-import Modal from 'react-bootstrap/Modal';
+import Modal from "react-bootstrap/Modal";
+import { useCookies } from "react-cookie";
+import apis from "../../apis";
+import "./navbar.css"
+import {useNavigate} from 'react-router-dom'
 
 export const NavBar = (props) => {
+  const navigate = useNavigate();
   const [ToggleNav, setToggleNav] = useState(false);
   const [CheckScroll, setCheckScroll] = useState(false);
   const themetoggle = useSelector((state) => state.theme);
   const [show, setShow] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(['cookie-name']);
 
   const dispatchtheme = useDispatch();
   const changeColor = () => {
@@ -21,20 +27,45 @@ export const NavBar = (props) => {
     }
   };
   window.addEventListener("scroll", changeColor);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [userData, setUserData] = useState({});
+  const user_id = cookies.user_id;
+  console.log(user_id);
+  const getUserData = () => {
+    apis
+      .get(`/getAccount/${user_id}`)
+      .then((res) => {
+        setUserData(res.data)
+      });
+  }
+  const handleLogout = () => {
+    removeCookie('user_id',{path:'/CozaStore'});
+  }
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   return (
     <>
       <Topbar className="">
         <div className="flex-sb-m h-full container top-bar">
-          <div className="left-top-bar">Free shipping for standard order over $100</div>
+          <div className="left-top-bar">
+            Free shipping for standard order over $100
+          </div>
           <div className="right-top-bar">
-              <a href="#" className="">Help & FAQs</a>
-              <a href="/CozaStore/MyAccount" className="">My Account</a>
-              <a href="#" className="">EN</a>
-              <a href="#" className="">USD</a>
+            <a href="#" className="">
+              Help & FAQs
+            </a>
+            <a href="/CozaStore/MyAccount" className="">
+              My Account
+            </a>
+            <a href="#" className="">
+              EN
+            </a>
+            <a href="#" className="">
+              USD
+            </a>
           </div>
         </div>
       </Topbar>
@@ -75,7 +106,7 @@ export const NavBar = (props) => {
             >
               About
             </NavLink>
-            
+
             <NavLink
               onClick={() => setToggleNav(!ToggleNav)}
               to="/CozaStore/Contact"
@@ -86,7 +117,7 @@ export const NavBar = (props) => {
 
           <ShopIcons>
             <Link
-              style={{color: "#3A3B3C"}}
+              style={{ color: "#3A3B3C" }}
               to="#"
               className="fas fa-search"
               onClick={handleShow}
@@ -96,16 +127,43 @@ export const NavBar = (props) => {
               className={themetoggle ? `fas fa-sun` : `far fa-moon`}
             ></div>
             <Link
-              style={{color: "#3A3B3C"}}
+              style={{ color: "#3A3B3C" }}
               to="/CozaStore/CheckOut"
               className="fas fa-shopping-cart"
             ></Link>
             <div className="far fa-heart"></div>
-            <Link
-              style={{color: "#3A3B3C"}}
-              to="/CozaStore/MyAccount"
-              className="fas fa-user myAccount"
-            ></Link>
+            <div className="my-account">
+              <span
+                style={{ color: "#3A3B3C" }}
+                className="fas fa-user myAccount"
+              ></span>
+              <div className="position-absolute account-option">
+                <ul
+                  style={{
+                    border: "1px solid black",
+                    padding: "5px",
+                    fontSize: "17px",
+                    width: "190px"
+                  }}
+                >
+                  {!user_id && <><li>
+                    <Link to="/CozaStore/Login">Login</Link>
+                  </li>
+                  <li>
+                    <Link to="/CozaStore/Register">Register</Link>
+                  </li></>}
+                  {user_id && <><li>
+                    <Link to="/CozaStore/MyAccount">My Account</Link>
+                  </li>
+                  <li>
+                    <Link to="/CozaStore/History">My History Payment</Link>
+                  </li>
+                  <li onClick={handleLogout}>
+                    Logout
+                  </li></>}
+                </ul>
+              </div>
+            </div>
             <div
               onClick={() => setToggleNav(!ToggleNav)}
               className={!ToggleNav ? "fas fa-bars" : "fas fa-times fa-xl"}
@@ -118,12 +176,21 @@ export const NavBar = (props) => {
           backdrop="static"
           keyboard={false}
           centered
-          
         >
           <Modal.Header closeButton></Modal.Header>
           <Modal.Body>
-            <div style={{display: "flex", justifyContent: "center", alignItems: "center", border: "1px solid #666"}}>
-              <input placeholder="Search....!" style={{border: "none",width: "100%", height: '40px'}}></input>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "1px solid #666",
+              }}
+            >
+              <input
+                placeholder="Search....!"
+                style={{ border: "none", width: "100%", height: "40px" }}
+              ></input>
             </div>
           </Modal.Body>
         </Modal>

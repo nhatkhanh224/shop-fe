@@ -144,12 +144,6 @@ export const ShopIcons = styled.div`
     &:hover{
       color: ${mainColor.purple} !important;
     }
-    &:nth-child(5){
-      display: none;
-      @media (max-width: 739px) {
-        display: flex;
-      }
-    }
   }
   & > div {
     cursor: pointer;

@@ -1,0 +1,12 @@
+.my-account{
+  position:relative;
+  @media (max-width: 739px) {
+    display: flex;
+  }
+}
+.account-option {
+  display: none;
+}
+.my-account:hover .account-option{
+  display: block;
+}

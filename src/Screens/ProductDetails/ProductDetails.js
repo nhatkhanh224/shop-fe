@@ -12,6 +12,7 @@ import { getProductWithIdAction } from "../../Redux/Actions/Action";
 import { Rating } from "../../Components/Rating/Rating";
 import { addToCart } from "../../Redux/Actions/Action";
 import { useCookies } from "react-cookie";
+import apis from "../../apis";
 export function ProductDetails() {
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -19,7 +20,6 @@ export function ProductDetails() {
   const user_id = Number(cookies.user_id);
   const [error, setError] = useState(false);
   const { loading, product } = useSelector((state) => state.SingleProduct);
-  console.log(product);
   const { loading: LoadingToAddProduct } = useSelector(
     (state) => state.addToCart
   );
@@ -30,7 +30,6 @@ export function ProductDetails() {
     qnt: 1,
     user_id: user_id || ""
   });
-  console.log(option);
   const [image, setImage] = useState([]);
   const [size, setSize] = useState([]);
   const [color, setColor] = useState([]);
@@ -39,6 +38,17 @@ export function ProductDetails() {
     () => dispatch(getProductWithIdAction(id)),
     [dispatch, id]
   );
+  const handleAddProductView = () => {
+    apis
+      .post("/addProductView", {
+        product_id: id,
+        user_id,
+      })
+  }
+  useEffect(() => {
+    handleAddProductView()
+  }, []);
+
   useEffect(() => {
     if (product.subImages) {
       let array = [
