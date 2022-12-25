@@ -8,7 +8,7 @@ export const Wraper = styled.div`
     color: white;
     cursor: pointer;
     border: none;
-    width: 140px;
+    width: 100%;
     text-decoration: none;
     
     @media (min-width: 676px) {

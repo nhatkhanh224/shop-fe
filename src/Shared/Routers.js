@@ -9,6 +9,7 @@ import {Login} from "../Screens/Auth/Login"
 import {Signup} from "../Screens/Auth/Signup"
 import { MyAccount } from "../Screens/Account/MyAccount";
 import { Recommends } from "../Screens/Recommends/Recommend";
+import { History } from "../Screens/History/History";
 export const AllRouters = () => {
   return (
     <Routes>
@@ -28,6 +29,7 @@ export const AllRouters = () => {
       <Route path="/CozaStore/CheckOut" element={<CheckOut />}></Route>
       <Route path="/CozaStore/MyAccount" element={<MyAccount />}></Route>
       <Route path="/CozaStore/Recommend" element={<Recommends />}></Route>
+      <Route path="/CozaStore/History" element={<History />}></Route>
     </Routes>
   );
 };

@@ -9,19 +9,28 @@ import { useCookies } from "react-cookie";
 import apis from "../../apis";
 // import { Button } from "@mui/material";
 import { Button } from "../../Components/btn/Button";
+import { Form } from "react-bootstrap";
+import {useNavigate} from 'react-router-dom'
 export function CheckOut() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [cookies] = useCookies(["cookie-name"]);
   const [checkOutProduct, setCheckOutProduct] = useState([]);
   console.log(checkOutProduct);
+  const [userData, setUserData] = useState({});
   const user_id = cookies.user_id;
-
+  const getUserData = () => {
+    apis.get(`/getAccount/${user_id}`).then((res) => {
+      setUserData(res.data);
+    });
+  };
   // const DeletItem = (id) => {
   //   dispatch({ type: REMOVE_FROM_CART, payload: id });
   // };
   useEffect(() => {
     getCheckoutProduct();
     Total();
+    getUserData();
   }, []);
   const Total = () => {
     const init = checkOutProduct.reduce((accumulator, object) => {
@@ -91,6 +100,25 @@ export function CheckOut() {
     getCheckoutProduct();
   };
 
+  const handleCheckout = async () => {
+    const total = Total();
+    if (user_id) {
+      await apis
+        .post(`/checkout`, {
+          userData,
+          total
+        })
+        .then((res) => {
+          navigate('/CozaStore/History');
+        });
+    } else {
+      // const itemClone = _.clone(checkOutProduct);
+      // itemClone[index].quantity = itemClone[index].quantity + 1;
+      // localStorage.setItem("carts", JSON.stringify(itemClone));
+      // getCheckoutProduct();
+    }
+  };
+
   return (
     <>
       {checkOutProduct.length !== 0 ? (
@@ -102,7 +130,7 @@ export function CheckOut() {
                 <tr>
                   <td>PRODUCT</td>
                   <td> </td>
-                  <td>Size</td>
+                  <td>Code</td>
                   <td>Quantity</td>
                   <td>Price</td>
                   <td>Total</td>
@@ -114,10 +142,13 @@ export function CheckOut() {
                   return (
                     <tr key={e.id}>
                       <td>
-                        <img src={`http://localhost:3000/${e.thumbnail}`} alt="Product img"></img>
+                        <img
+                          src={`http://localhost:3000/${e.thumbnail}`}
+                          alt="Product img"
+                        ></img>
                       </td>
                       <td>{e.title}</td>
-                      <td>{e.size}</td>
+                      <td>{e.product_code}</td>
                       <td>
                         {e.quantity > 1 && (
                           <button
@@ -162,7 +193,7 @@ export function CheckOut() {
               <div>SubTotal</div>
               <div>{Total()} đ</div>
             </div>
-           {checkOutProduct.length === 0 && (
+            {checkOutProduct.length !== 0 && (
               <div>
                 <div>Shipping</div>
                 <div>
@@ -171,17 +202,37 @@ export function CheckOut() {
                     your address, or contact us if you need any help.
                   </p>
                   <span>CALCULATION SHIPPING</span>
-                  <SELECT
-                    label={"city"}
-                    options={["DaNang", "HCM", "HaNoi"]}
-                    returnVal={(val) => val}
-                  ></SELECT>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter address to shipping"
+                    className="mt-2"
+                    defaultValue={userData.address}
+                    onChange={(e) => {
+                      setUserData({
+                        ...userData,
+                        address: e.target.value,
+                      });
+                    }}
+                  />
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter phone number to contact"
+                    className="mt-2"
+                    defaultValue={userData.phone}
+                    onChange={(e) => {
+                      setUserData({
+                        ...userData,
+                        phone: e.target.value,
+                      });
+                    }}
+                  />
                 </div>
-                <div>Total: {Total()} đ</div>
+                <div className="mt-2">Total: {Total()} đ</div>
               </div>
             )}
             <Button
-              value="CheckOut"
+              value="Proceed to Checkout"
+              onClick={handleCheckout}
             ></Button>
           </CartTotals>
         </CheckOutStyle>

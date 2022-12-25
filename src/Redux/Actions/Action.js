@@ -65,7 +65,7 @@ export const addToCart = (option) => {
       );
       const dataCart = {
         id: option.id,
-        Color: option.Color,
+        color: option.Color,
         size: option.Size,
         quantity: option.qnt,
         price: data.price,
