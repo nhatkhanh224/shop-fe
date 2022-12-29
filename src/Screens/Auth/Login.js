@@ -21,7 +21,7 @@ export function Login() {
         if (res.data) {
           const maxAge = 60 * 60 * 1000;
           setCookie('user_id', res.data, maxAge);
-          navigate('/CozaStore');
+          window.location = "/CozaStore"
         } else {
           return false
         }

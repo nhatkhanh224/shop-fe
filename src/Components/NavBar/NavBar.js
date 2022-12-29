@@ -158,9 +158,10 @@ export const NavBar = (props) => {
                   <li>
                     <Link to="/CozaStore/History">My History Payment</Link>
                   </li>
-                  <li onClick={handleLogout}>
-                    Logout
-                  </li></>}
+                  <li>
+                    <a onClick={handleLogout} href="/CozaStore">Logout</a>
+                  </li>
+                  </>}
                 </ul>
               </div>
             </div>
