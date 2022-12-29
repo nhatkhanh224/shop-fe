@@ -9,6 +9,9 @@ import {
   ADD_TO_CART_SUCCESS,
   ADD_TO_CART_FAIL,
   REMOVE_FROM_CART,
+  PRODUCT_LIST_RECOMMEND_REQUEST,
+  PRODUCT_LIST_RECOMMEND_FAIL,
+  PRODUCT_LIST_RECOMMEND_SUCCESS
 } from "../Constant/Constant";
 
 const initTheme = { theme: false };
@@ -29,6 +32,23 @@ export const productDataReducer = (state = initProduct, action) => {
       return { ...state, data: [...action.payload], loading: false };
 
     case PRODUCT_LIST_FAIL:
+      return { ...state, data: [...action.payload], loading: false };
+
+    default:
+      return state;
+  }
+};
+
+const initProductRecommend = { data: [], loading: true };
+export const productRecommendDataReducer = (state = initProductRecommend, action) => {
+  switch (action.type) {
+    case PRODUCT_LIST_RECOMMEND_REQUEST:
+      return { ...state, loading: true };
+
+    case PRODUCT_LIST_RECOMMEND_SUCCESS:
+      return { ...state, data: [...action.payload], loading: false };
+
+    case PRODUCT_LIST_RECOMMEND_FAIL:
       return { ...state, data: [...action.payload], loading: false };
 
     default:

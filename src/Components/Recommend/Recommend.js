@@ -3,29 +3,36 @@ import { Products, Filters, Cards, Search, btnLoadMore } from "./Styled";
 import { Link } from "react-router-dom";
 import { Button } from "../btn/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { listProductAction } from "../../Redux/Actions/Action";
+import { listProductRecommendAction } from "../../Redux/Actions/Action";
 import Skeleton from "@mui/material/Skeleton";
 import { Rating } from "../Rating/Rating";
 import apis from '../../apis';
+import { useCookies } from "react-cookie";
 
 export function Recommend(props) {
   const dispatch = useDispatch();
-  const { loading, data } = useSelector((state) => state.productData); //get card product data
+  const { loading, data } = useSelector((state) => state.productDataReducer); //get card product data
   const [limit, setLimit] = useState(4);
   const [type, setType] = useState("");
+  const [cookies] = useCookies(["cookie-name"]);
+  const user_id = cookies.user_id;
   //func search box
 
   useEffect(() => {
-    dispatch(listProductAction());
+    if (user_id) {
+      dispatch(listProductRecommendAction(user_id));
+    } else {
+      dispatch(listProductRecommendAction(1));
+    }
   }, [dispatch]);
 
   //function btn filter
 
-  const handleLimitation = () => {
-    const add = limit + 4;
-    setLimit(add);
-    dispatch(listProductAction(type, add));
-  };
+  // const handleLimitation = () => {
+  //   const add = limit + 4;
+  //   setLimit(add);
+  //   dispatch(listProductRecommendAction(type, add));
+  // };
 
   // func. jsx => display data
   const displayProduct = () => (
@@ -65,7 +72,7 @@ export function Recommend(props) {
         <Button 
           customClass="m-y"
           value="Load More"
-          onClick={handleLimitation}
+          // onClick={handleLimitation}
         ></Button>
       </div>
     </>
@@ -74,7 +81,7 @@ export function Recommend(props) {
     <>
       <Products>
         <div className="container">
-          <h2>RECOMMEND FOR YOU</h2>
+          <h2>RECOMMEND FOR YOU </h2>
           {displayProduct()}
         </div>
       </Products>

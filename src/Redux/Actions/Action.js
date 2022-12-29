@@ -9,6 +9,9 @@ import {
   ADD_TO_CART_REQUEST,
   ADD_TO_CART_SUCCESS,
   ADD_TO_CART_FAIL,
+  PRODUCT_LIST_RECOMMEND_REQUEST,
+  PRODUCT_LIST_RECOMMEND_FAIL,
+  PRODUCT_LIST_RECOMMEND_SUCCESS
 } from "../Constant/Constant";
 
 export const themeAction = () => {
@@ -38,6 +41,20 @@ export const listProductAction = (filter, limit = 4) => {
       } catch (error) {
         dispatch({ type: PRODUCT_LIST_FAIL, payload: error.message });
       }
+    }
+  };
+};
+
+export const listProductRecommendAction = (user_id) => {
+  return async (dispatch) => {
+    dispatch({ type: PRODUCT_LIST_RECOMMEND_REQUEST });
+    try {
+      const { data } = await axios.get(
+        `http://localhost:3000/api/getRecommend/${user_id}`
+      );
+      dispatch({ type: PRODUCT_LIST_RECOMMEND_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({ type: PRODUCT_LIST_RECOMMEND_FAIL, payload: error.message });
     }
   };
 };

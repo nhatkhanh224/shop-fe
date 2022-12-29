@@ -41,6 +41,7 @@ export const NavBar = (props) => {
   }
   const handleLogout = () => {
     removeCookie('user_id',{path:'/CozaStore'});
+    removeCookie('user_id',{path:'/'});
   }
   useEffect(() => {
     getUserData();
@@ -143,7 +144,8 @@ export const NavBar = (props) => {
                     border: "1px solid black",
                     padding: "5px",
                     fontSize: "17px",
-                    width: "190px"
+                    width: "190px",
+                    backgroundColor:"white"
                   }}
                 >
                   {!user_id && <><li>

@@ -25,7 +25,7 @@ export function History() {
   // };
   const getHistory = () => {
     apis.get(`/getHistory/${user_id}`).then((res) => {
-      setHistory(res.data);
+      setHistory(res.data[0]);
     });
   };
   // const DeletItem = (id) => {
@@ -38,47 +38,47 @@ export function History() {
   return (
     <>
       <div className="container">
-        {history.length !== 0 ? (
-          history.map((item) => {
+        {history && history.length !== 0 ? (
+          history.payment_details.map((item) => {
             return (
               <ProductCard>
                 <div className="d-flex align-items-center justify-content-between">
                   <div className="d-flex align-items-center">
                     <img
-                      src={`http://localhost:3000/${item.payment_details.thumbnail}`}
+                      src={`http://localhost:3000/${item.thumbnail}`}
                       style={{ width: "80px" }}
                     />
                     <div style={{ marginLeft: "20px" }}>
                       <div>
                         <span>
                           <Link
-                            to={`/CozaStore/ProductDetails/${item.payment_details.product_id}`}
-                            key={item.payment_details.product_id}
+                            to={`/CozaStore/ProductDetails/${item.product_id}`}
+                            key={item.product_id}
                           >
-                            {item.payment_details.name}
+                            {item.name}
                           </Link>
                         </span>
                       </div>
                       <div>
                         <div>
-                          <span>{item.payment_details.size} - {item.payment_details.color}</span>
+                          <span>{item.size} - {item.color}</span>
                         </div>
                         <div>
-                          <span>x {item.payment_details.quantity}</span>
+                          <span>x {item.quantity}</span>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div>
-                    <span>{item.payment_details.price} đ</span>
+                    <span>{item.price} đ</span>
                   </div>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-end">
                   <div style={{ marginRight: "5px" }}>
                     <Link
-                      to={`/CozaStore/ProductDetails/${item.payment_details.product_id}`}
-                      key={item.payment_details.product_id}
+                      to={`/CozaStore/ProductDetails/${item.product_id}`}
+                      key={item.product_id}
                     >
                       <Button value="Buy Again" />
                     </Link>

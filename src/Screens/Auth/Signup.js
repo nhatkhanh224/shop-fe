@@ -3,11 +3,10 @@ import apis from "../../apis";
 import { Auth } from "./Styled.js";
 import {minlength, vallidEmail} from './validate.js';
 import { useCallback } from 'react';
+import { useNavigate } from "react-router-dom";
 
 export function Signup() {
-
-
-  
+  const navigate = useNavigate();
   return (
     <>
       <Auth className="container">
@@ -84,7 +83,9 @@ export function Signup() {
           </button>
           <div className="form-bottom">
             <span>Have an account?</span>
-            <a href="/CozaStore/Login">Click Here!</a>
+            <a href="#" onClick={()=>{
+              navigate('/CozaStore/Login')
+            }}>Click Here!</a>
           </div>
         </form>
       </Auth>
