@@ -8,16 +8,22 @@ import Skeleton from "@mui/material/Skeleton";
 import { Rating } from "../Rating/Rating";
 import apis from "../../apis";
 import Form from "react-bootstrap/Form";
+import "./prodacts.css";
 
 export function Prodacts(props) {
   const dispatch = useDispatch();
-  const [toggleFilter, setToggleFilter] = useState(false); //to Show serch box
+  const [toggleFilterSearch, setToggleFilterSearch] = useState(false); //to Show serch box
+  const [toggleFilter, setToggleFilter] = useState(false);
   const { loading, data } = useSelector((state) => state.productData); //get card product data
   const [activeFilter, setActiveFilter] = useState("All Products"); //btn filter
-  const [limit, setLimit] = useState(4);
+  const [limit, setLimit] = useState(10);
   const [type, setType] = useState("");
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
+  const [sortBy,setSortBy] = useState("");
+  const [filterColor,setFilterColor] = useState("");
+  const [filterPrice,setFilterPrice] = useState("");
+
   //func search box
 
   useEffect(() => {
@@ -25,11 +31,11 @@ export function Prodacts(props) {
     getCategories();
   }, [dispatch]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (activeFilter && activeFilter !== "All Products") {
       getSubCategories();
     }
-  },[activeFilter])
+  }, [activeFilter]);
 
   //function btn filter
   const handelFilter = (e) => {
@@ -38,16 +44,28 @@ export function Prodacts(props) {
     setActiveFilter(category);
     dispatch(listProductAction(category, limit));
   };
-  const handelFilterSubCategory = (e) => {
-    const category = e.target.value;
+  const handelFilterSubCategory = (id) => {
+    const category = id;
     setType(category);
     dispatch(listProductAction(category, limit));
   };
 
   const handleLimitation = () => {
-    const add = limit + 4;
+    const add = limit + 10;
     setLimit(add);
     dispatch(listProductAction(type, add));
+  };
+  const handleSortBy = (sort_by) => {
+    setSortBy(sort_by);
+    dispatch(listProductAction(type, limit,sort_by,filterColor,filterPrice));
+  };
+  const handleFilterPrice = (filterPrice) => {
+    setFilterPrice(filterPrice);
+    dispatch(listProductAction(type, limit,sortBy,filterColor,filterPrice));
+  };
+  const handleFilterColor = (filterColor) => {
+    setFilterColor(filterColor);
+    dispatch(listProductAction(type, limit,sortBy,filterColor,filterPrice));
   };
 
   const getCategories = () => {
@@ -59,7 +77,7 @@ export function Prodacts(props) {
     apis.get(`/category/${activeFilter}`).then((res) => {
       setSubCategories(res.data);
     });
-  }
+  };
 
   // func. jsx => display data
   const displayProduct = () => (
@@ -130,7 +148,11 @@ export function Prodacts(props) {
           {/*//Filter Type} */}
           <span
             data-category=""
-            className={activeFilter === "All Products" || activeFilter === "" ? "active" : ""}
+            className={
+              activeFilter === "All Products" || activeFilter === ""
+                ? "active"
+                : ""
+            }
             onClick={handelFilter}
           >
             All Products
@@ -174,7 +196,20 @@ export function Prodacts(props) {
         {
           <div>
             <button
-              onClick={() => setToggleFilter(!toggleFilter)}
+              onClick={() => {
+                setToggleFilterSearch(false);
+                setToggleFilter(!toggleFilter);
+              }}
+              className={!toggleFilter ? "fas fa-filter" : " fas fa-times"}
+              style={{ marginRight: "10px" }}
+            >
+              Filter
+            </button>
+            <button
+              onClick={() => {
+                setToggleFilter(false);
+                setToggleFilterSearch(!toggleFilterSearch);
+              }}
               className={!toggleFilter ? "fas fa-search" : " fas fa-times"}
             >
               Search
@@ -184,10 +219,101 @@ export function Prodacts(props) {
       </Filters>
 
       {
-        <Search className={toggleFilter ? "show" : ""}>
+        <Search className={toggleFilterSearch ? "show" : ""}>
           <i className="fas fa-search"></i>
           <input type="search" placeholder="Search here !"></input>
         </Search>
+      }
+
+      {
+        <>
+          <div className={toggleFilter ? "filter-product" : "d-none"}>
+            <div className="row">
+              <div className="col-md-3">
+                <div className="filer-title">
+                  <span>Sort by</span>
+                </div>
+                <ul className="filter-list">
+                  <li onClick={()=>{handleSortBy('Newness')}}>Newness</li>
+                  <li onClick={()=>{handleSortBy('Top Buy')}}>Top buy</li>
+                  <li onClick={()=>{handleSortBy('Low to High')}}>Price: Low to High</li>
+                  <li onClick={()=>{handleSortBy('High to Low')}}>Price: High to Low</li>
+                </ul>
+              </div>
+              <div className="col-md-3">
+                <div className="filer-title">
+                  <span>Price</span>
+                </div>
+                <ul className="filter-list">
+                  {/* <li onClick={()=>{handleFilterPrice('')}}>All</li> */}
+                  <li onClick={()=>{handleFilterPrice('0-200')}}>0 đ - 200,000 đ</li>
+                  <li onClick={()=>{handleFilterPrice('200-400')}}>200,000 đ - 400,000 đ</li>
+                  <li onClick={()=>{handleFilterPrice('400-600')}}>400,000 đ - 600,000 đ</li>
+                  <li onClick={()=>{handleFilterPrice('Under 600')}}>600,000 đ +</li>
+                </ul>
+              </div>
+              <div className="col-md-3">
+                <div className="filer-title">
+                  <span>Color</span>
+                </div>
+                <ul className="filter-list">
+                  <li onClick={()=>{handleFilterColor('black')}}>
+                    <i className="fas fa-circle" style={{ color: "black" }}></i>{" "}
+                    <span>Black</span>
+                  </li>
+                  <li onClick={()=>{handleFilterColor('white')}}>
+                    <i className="fas fa-circle" style={{ color: "white" }}></i>{" "}
+                    <span>White</span>
+                  </li>
+                  <li onClick={()=>{handleFilterColor('blue')}}>
+                    <i className="fas fa-circle" style={{ color: "blue" }}></i>{" "}
+                    <span>Blue</span>
+                  </li>
+                  <li onClick={()=>{handleFilterColor('green')}}>
+                    <i className="fas fa-circle" style={{ color: "green" }}></i>{" "}
+                    <span>Green</span>
+                  </li>
+                  <li onClick={()=>{handleFilterColor('yellow')}}>
+                    <i
+                      className="fas fa-circle"
+                      style={{ color: "yellow" }}
+                    ></i>{" "}
+                    <span>Yellow</span>
+                  </li>
+                  <li onClick={()=>{handleFilterColor('brown')}}>
+                    <i className="fas fa-circle" style={{ color: "brown" }}></i>{" "}
+                    <span>Brown</span>
+                  </li>
+                  <li onClick={()=>{handleFilterColor('red')}}>
+                    <i className="fas fa-circle" style={{ color: "red" }}></i>{" "}
+                    <span>Red</span>
+                  </li>
+                </ul>
+              </div>
+              {activeFilter != "All Products" && activeFilter && (
+                <div className="col-md-3">
+                  <div className="filer-title">
+                    <span>Sub categories</span>
+                  </div>
+                  <ul className="filter-list">
+                    {subCategories &&
+                      subCategories.map((item) => {
+                        return (
+                          <li
+                            onClick={() => {
+                              handelFilterSubCategory(item.id);
+                            }}
+                          >
+                            {item.name}
+                          </li>
+                        );
+                      })}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </>
       }
     </>
   );
@@ -198,32 +324,6 @@ export function Prodacts(props) {
         <div className="container">
           <h2>PRODUCT OVERVIEW</h2>
           {Filter()}
-          {activeFilter!="All Products" && <div className="d-flex">
-            <div className="m-l-2">
-              <Form.Select aria-label="Default select example" onChange={(e)=>{handelFilterSubCategory(e)}}>
-                <option disabled>Sub categories</option>
-                {subCategories && subCategories.map((item)=>{
-                  return <option value={item.id}>{item.name}</option>
-                })}
-              </Form.Select>
-            </div>
-            <div className="ml-2">
-              <Form.Select aria-label="Default select example">
-                <option>Color</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </Form.Select>
-            </div>
-            <div className="ml-2">
-              <Form.Select aria-label="Default select example">
-                <option>Sort</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </Form.Select>
-            </div>
-          </div>}
           {displayProduct()}
         </div>
       </Products>

@@ -20,13 +20,13 @@ export const themeAction = () => {
   };
 };
 
-export const listProductAction = (filter, limit = 4) => {
+export const listProductAction = (filter, limit = 10, sort_by, filterColor, filterPrice) => {
   return async (dispatch) => {
     dispatch({ type: PRODUCT_LIST_REQUEST });
     if (filter) {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/api/productByCategory/${filter}?limit=${limit}`
+          `http://localhost:3000/api/productByCategory/${filter}?limit=${limit}&sort_by=${sort_by}&color=${filterColor}&price=${filterPrice}`
         );
         dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
       } catch (error) {
@@ -35,7 +35,7 @@ export const listProductAction = (filter, limit = 4) => {
     } else {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/api/product?limit=${limit}`
+          `http://localhost:3000/api/product?limit=${limit}&sort_by=${sort_by}&color=${filterColor}&price=${filterPrice}`
         );
         dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
       } catch (error) {

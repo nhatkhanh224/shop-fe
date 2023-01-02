@@ -1,0 +1,20 @@
+.filter-product {
+  background-color: #f2f2f2;
+  padding: 11px 2px;
+  margin-top: 10px;
+}
+.filer-title {
+  margin-left: 30px;
+  font-size: 18px;
+}
+.filter-list {
+  color: #aaa;
+  font-size: 15px;
+}
+.filter-list li {
+  cursor: pointer;
+}
+.filter-list li:hover {
+  text-decoration: underline;
+  color: blue;
+}
