@@ -22,7 +22,7 @@ export function Recommend(props) {
     if (user_id) {
       dispatch(listProductRecommendAction(user_id));
     } else {
-      dispatch(listProductRecommendAction(1));
+      dispatch(listProductRecommendAction(0));
     }
   }, [dispatch]);
 

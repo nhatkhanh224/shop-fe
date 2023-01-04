@@ -20,9 +20,10 @@ export function Prodacts(props) {
   const [type, setType] = useState("");
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-  const [sortBy,setSortBy] = useState("");
-  const [filterColor,setFilterColor] = useState("");
-  const [filterPrice,setFilterPrice] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const [filterColor, setFilterColor] = useState("");
+  const [filterPrice, setFilterPrice] = useState("");
+  const [keySearch, setKeySearch] = useState("");
 
   //func search box
 
@@ -57,15 +58,15 @@ export function Prodacts(props) {
   };
   const handleSortBy = (sort_by) => {
     setSortBy(sort_by);
-    dispatch(listProductAction(type, limit,sort_by,filterColor,filterPrice));
+    dispatch(listProductAction(type, limit, sort_by, filterColor, filterPrice));
   };
   const handleFilterPrice = (filterPrice) => {
     setFilterPrice(filterPrice);
-    dispatch(listProductAction(type, limit,sortBy,filterColor,filterPrice));
+    dispatch(listProductAction(type, limit, sortBy, filterColor, filterPrice));
   };
   const handleFilterColor = (filterColor) => {
     setFilterColor(filterColor);
-    dispatch(listProductAction(type, limit,sortBy,filterColor,filterPrice));
+    dispatch(listProductAction(type, limit, sortBy, filterColor, filterPrice));
   };
 
   const getCategories = () => {
@@ -78,6 +79,12 @@ export function Prodacts(props) {
       setSubCategories(res.data);
     });
   };
+
+  const handleSearch = (e) => {
+    let keySearch = e.target.value;
+    setKeySearch(keySearch)
+    dispatch(listProductAction(type, limit, sortBy, filterColor, filterPrice,keySearch));
+  }
 
   // func. jsx => display data
   const displayProduct = () => (
@@ -221,7 +228,7 @@ export function Prodacts(props) {
       {
         <Search className={toggleFilterSearch ? "show" : ""}>
           <i className="fas fa-search"></i>
-          <input type="search" placeholder="Search here !"></input>
+          <input type="search" placeholder="Search here !" onChange={(e)=>{handleSearch(e)}}></input>
         </Search>
       }
 
@@ -234,10 +241,34 @@ export function Prodacts(props) {
                   <span>Sort by</span>
                 </div>
                 <ul className="filter-list">
-                  <li onClick={()=>{handleSortBy('Newness')}}>Newness</li>
-                  <li onClick={()=>{handleSortBy('Top Buy')}}>Top buy</li>
-                  <li onClick={()=>{handleSortBy('Low to High')}}>Price: Low to High</li>
-                  <li onClick={()=>{handleSortBy('High to Low')}}>Price: High to Low</li>
+                  <li
+                    onClick={() => {
+                      handleSortBy("Newness");
+                    }}
+                  >
+                    Newness
+                  </li>
+                  <li
+                    onClick={() => {
+                      handleSortBy("Top Buy");
+                    }}
+                  >
+                    Top buy
+                  </li>
+                  <li
+                    onClick={() => {
+                      handleSortBy("Low to High");
+                    }}
+                  >
+                    Price: Low to High
+                  </li>
+                  <li
+                    onClick={() => {
+                      handleSortBy("High to Low");
+                    }}
+                  >
+                    Price: High to Low
+                  </li>
                 </ul>
               </div>
               <div className="col-md-3">
@@ -246,10 +277,34 @@ export function Prodacts(props) {
                 </div>
                 <ul className="filter-list">
                   {/* <li onClick={()=>{handleFilterPrice('')}}>All</li> */}
-                  <li onClick={()=>{handleFilterPrice('0-200')}}>0 đ - 200,000 đ</li>
-                  <li onClick={()=>{handleFilterPrice('200-400')}}>200,000 đ - 400,000 đ</li>
-                  <li onClick={()=>{handleFilterPrice('400-600')}}>400,000 đ - 600,000 đ</li>
-                  <li onClick={()=>{handleFilterPrice('Under 600')}}>600,000 đ +</li>
+                  <li
+                    onClick={() => {
+                      handleFilterPrice("0-200");
+                    }}
+                  >
+                    0 đ - 200,000 đ
+                  </li>
+                  <li
+                    onClick={() => {
+                      handleFilterPrice("200-400");
+                    }}
+                  >
+                    200,000 đ - 400,000 đ
+                  </li>
+                  <li
+                    onClick={() => {
+                      handleFilterPrice("400-600");
+                    }}
+                  >
+                    400,000 đ - 600,000 đ
+                  </li>
+                  <li
+                    onClick={() => {
+                      handleFilterPrice("Under 600");
+                    }}
+                  >
+                    600,000 đ +
+                  </li>
                 </ul>
               </div>
               <div className="col-md-3">
@@ -257,34 +312,62 @@ export function Prodacts(props) {
                   <span>Color</span>
                 </div>
                 <ul className="filter-list">
-                  <li onClick={()=>{handleFilterColor('black')}}>
+                  <li
+                    onClick={() => {
+                      handleFilterColor("black");
+                    }}
+                  >
                     <i className="fas fa-circle" style={{ color: "black" }}></i>{" "}
                     <span>Black</span>
                   </li>
-                  <li onClick={()=>{handleFilterColor('white')}}>
+                  <li
+                    onClick={() => {
+                      handleFilterColor("white");
+                    }}
+                  >
                     <i className="fas fa-circle" style={{ color: "white" }}></i>{" "}
                     <span>White</span>
                   </li>
-                  <li onClick={()=>{handleFilterColor('blue')}}>
+                  <li
+                    onClick={() => {
+                      handleFilterColor("blue");
+                    }}
+                  >
                     <i className="fas fa-circle" style={{ color: "blue" }}></i>{" "}
                     <span>Blue</span>
                   </li>
-                  <li onClick={()=>{handleFilterColor('green')}}>
+                  <li
+                    onClick={() => {
+                      handleFilterColor("green");
+                    }}
+                  >
                     <i className="fas fa-circle" style={{ color: "green" }}></i>{" "}
                     <span>Green</span>
                   </li>
-                  <li onClick={()=>{handleFilterColor('yellow')}}>
+                  <li
+                    onClick={() => {
+                      handleFilterColor("yellow");
+                    }}
+                  >
                     <i
                       className="fas fa-circle"
                       style={{ color: "yellow" }}
                     ></i>{" "}
                     <span>Yellow</span>
                   </li>
-                  <li onClick={()=>{handleFilterColor('brown')}}>
+                  <li
+                    onClick={() => {
+                      handleFilterColor("brown");
+                    }}
+                  >
                     <i className="fas fa-circle" style={{ color: "brown" }}></i>{" "}
                     <span>Brown</span>
                   </li>
-                  <li onClick={()=>{handleFilterColor('red')}}>
+                  <li
+                    onClick={() => {
+                      handleFilterColor("red");
+                    }}
+                  >
                     <i className="fas fa-circle" style={{ color: "red" }}></i>{" "}
                     <span>Red</span>
                   </li>

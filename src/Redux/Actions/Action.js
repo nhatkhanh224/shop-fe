@@ -11,7 +11,7 @@ import {
   ADD_TO_CART_FAIL,
   PRODUCT_LIST_RECOMMEND_REQUEST,
   PRODUCT_LIST_RECOMMEND_FAIL,
-  PRODUCT_LIST_RECOMMEND_SUCCESS
+  PRODUCT_LIST_RECOMMEND_SUCCESS,
 } from "../Constant/Constant";
 
 export const themeAction = () => {
@@ -20,13 +20,20 @@ export const themeAction = () => {
   };
 };
 
-export const listProductAction = (filter, limit = 10, sort_by, filterColor, filterPrice) => {
+export const listProductAction = (
+  filter,
+  limit = 10,
+  sort_by,
+  filterColor,
+  filterPrice,
+  keySearch
+) => {
   return async (dispatch) => {
     dispatch({ type: PRODUCT_LIST_REQUEST });
     if (filter) {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/api/productByCategory/${filter}?limit=${limit}&sort_by=${sort_by}&color=${filterColor}&price=${filterPrice}`
+          `http://localhost:3000/api/productByCategory/${filter}?limit=${limit}&sort_by=${sort_by}&color=${filterColor}&price=${filterPrice}&search=${keySearch}`
         );
         dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
       } catch (error) {
@@ -35,7 +42,7 @@ export const listProductAction = (filter, limit = 10, sort_by, filterColor, filt
     } else {
       try {
         const { data } = await axios.get(
-          `http://localhost:3000/api/product?limit=${limit}&sort_by=${sort_by}&color=${filterColor}&price=${filterPrice}`
+          `http://localhost:3000/api/product?limit=${limit}&sort_by=${sort_by}&color=${filterColor}&price=${filterPrice}&search=${keySearch}`
         );
         dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
       } catch (error) {
@@ -88,23 +95,23 @@ export const addToCart = (option) => {
         price: data.price,
         thumbnail: data.thumbnail,
         name: data.name,
-        user_id: option.user_id || ""
+        user_id: option.user_id || "",
       };
-      console.log('DATA CART',dataCart);
+      console.log("DATA CART", dataCart);
       if (option.user_id) {
-        await axios.post(
-          `http://localhost:3000/api/addToCart`,{dataCart}
-        ).then((res)=>{
-          try {
-            console.log(res);
-            dispatch({
-              type: ADD_TO_CART_SUCCESS,
-              payload: dataCart,
-            });
-          } catch (error) {
-            console.log(error);
-          }
-        })
+        await axios
+          .post(`http://localhost:3000/api/addToCart`, { dataCart })
+          .then((res) => {
+            try {
+              console.log(res);
+              dispatch({
+                type: ADD_TO_CART_SUCCESS,
+                payload: dataCart,
+              });
+            } catch (error) {
+              console.log(error);
+            }
+          });
       } else {
         const dataCartExits = JSON.parse(localStorage.getItem("carts")) || [];
         dataCartExits.push(dataCart);
