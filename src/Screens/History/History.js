@@ -15,7 +15,6 @@ export function History() {
   const dispatch = useDispatch();
   const [cookies] = useCookies(["cookie-name"]);
   const [history, setHistory] = useState([]);
-  console.log(history);
   const [userData, setUserData] = useState({});
   const user_id = cookies.user_id;
   // const getUserData = () => {
@@ -23,9 +22,9 @@ export function History() {
   //     setUserData(res.data);
   //   });
   // };
-  const getHistory = () => {
-    apis.get(`/getHistory/${user_id}`).then((res) => {
-      setHistory(res.data[0]);
+  const getHistory = async () => {
+    await apis.get(`/getHistory/${user_id}`).then((res) => {
+      setHistory(res.data);
     });
   };
   // const DeletItem = (id) => {
@@ -38,8 +37,8 @@ export function History() {
   return (
     <>
       <div className="container">
-        {history && history.length !== 0 ? (
-          history.payment_details.map((item) => {
+        {history && history.length != 0 ? (
+          history.map((item,index) => {
             return (
               <ProductCard>
                 <div className="d-flex align-items-center justify-content-between">
@@ -70,7 +69,7 @@ export function History() {
                     </div>
                   </div>
                   <div>
-                    <span>{item.price} đ</span>
+                    <span>{item.price*item.quantity} đ</span>
                   </div>
                 </div>
                 <hr />
