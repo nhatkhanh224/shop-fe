@@ -68,13 +68,13 @@ export function Recommend(props) {
           ))}
         </div>
       </Cards>
-      <div style={{ width: "0", margin: "20px auto", display: 'flex', justifyContent: 'center'}}>
+      {/* <div style={{ width: "0", margin: "20px auto", display: 'flex', justifyContent: 'center'}}>
         <Button 
           customClass="m-y"
           value="Load More"
           // onClick={handleLimitation}
         ></Button>
-      </div>
+      </div> */}
     </>
   );
   return (

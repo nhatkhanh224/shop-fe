@@ -152,7 +152,7 @@ export const NavBar = (props) => {
                     <Link to="/CozaStore/Login">Login</Link>
                   </li>
                   <li>
-                    <Link to="/CozaStore/Register">Register</Link>
+                    <Link to="/CozaStore/Signup">Register</Link>
                   </li></>}
                   {user_id && <><li>
                     <Link to="/CozaStore/MyAccount">My Account</Link>

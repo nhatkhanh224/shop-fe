@@ -16,7 +16,7 @@ export function Prodacts(props) {
   const [toggleFilter, setToggleFilter] = useState(false);
   const { loading, data } = useSelector((state) => state.productData); //get card product data
   const [activeFilter, setActiveFilter] = useState("All Products"); //btn filter
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(12);
   const [type, setType] = useState("");
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
