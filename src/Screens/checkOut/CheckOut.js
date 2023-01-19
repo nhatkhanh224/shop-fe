@@ -23,13 +23,17 @@ export function CheckOut() {
     type: "",
     value: 0,
   });
-  console.log("couponValue---->", couponValue);
+  const [addressMetamask, setAddressMetamask] = useState("");
+  const { ethereum } = window;
   const user_id = cookies.user_id;
   const getUserData = () => {
     apis.get(`/getAccount/${user_id}`).then((res) => {
       setUserData(res.data);
     });
   };
+  const methodPayment = ["Payment on delivery", "Metamask"];
+  const [method, setMethod] = useState("Payment on delivery");
+
   // const DeletItem = (id) => {
   //   dispatch({ type: REMOVE_FROM_CART, payload: id });
   // };
@@ -154,22 +158,28 @@ export function CheckOut() {
       totalResult = Total();
     }
     if (user_id) {
-      try {
-        await apis
-          .post(`/checkout`, {
-            userData,
-            total: totalResult,
-            discount_id,
-          })
-          .then((window.location = "/CozaStore/History"));
-      } catch (error) {
-        alert(error);
+      if (method == "Metamask") {
+        if (typeof window.ethereum !== "undefined") {
+          sendTransaction(totalResult,discount_id)
+        } else {
+          alert("Please install metamask");
+        }
+      } else {
+        try {
+          await apis
+            .post(`/checkout`, {
+              userData,
+              total: totalResult,
+              discount_id,
+              method,
+            })
+            .then((window.location = "/CozaStore/History"));
+        } catch (error) {
+          alert(error);
+        }
       }
     } else {
-      // const itemClone = _.clone(checkOutProduct);
-      // itemClone[index].quantity = itemClone[index].quantity + 1;
-      // localStorage.setItem("carts", JSON.stringify(itemClone));
-      // getCheckoutProduct();
+      alert("Please login to checkout");
     }
   };
 
@@ -186,8 +196,53 @@ export function CheckOut() {
         });
       })
       .catch((error) => {
-        alert(error);
+        alert("Coupon Invalid");
       });
+  };
+
+  const handleMetamask = async () => {
+    const accounts = await ethereum.request({ method: "eth_requestAccounts" });
+    if (accounts) {
+      const account = accounts[0];
+      setAddressMetamask(account);
+      alert("Connect Metamask Success !");
+    } else {
+      alert("Please register account metamask");
+    }
+  };
+
+  useEffect(() => {
+    if (method == "Metamask") {
+      handleMetamask();
+    }
+  }, [method]);
+
+  const sendTransaction = async (total,discount_id) => {
+    await ethereum
+      .request({
+        method: "eth_sendTransaction",
+        params: [
+          {
+            from: addressMetamask,
+            to: "0xdDa4A6875091bF7809cF43f40f3C22d6d4a1eeAD",
+            value: Number(28000000000*total).toString(16),
+            gasPrice: Number(2500000).toString(16),
+            gas: Number(21000).toString(16),
+          },
+        ],
+      })
+      .then(async (txHash) => {
+        await apis
+          .post(`/checkout`, {
+            userData,
+            total: total,
+            discount_id,
+            method,
+            transaction_id:txHash
+          })
+          .then((window.location = "/CozaStore/History"));
+      })
+      .catch((error) => console.error);
   };
 
   return (
@@ -320,8 +375,13 @@ export function CheckOut() {
                   <Form.Select
                     aria-label="Default select example"
                     className="mt-2"
+                    onChange={(e) => {
+                      setMethod(e.target.value);
+                    }}
                   >
-                    <option value="Payment on delivery">Payment on delivery</option>
+                    {methodPayment.map((item) => {
+                      return <option value={item}>{item}</option>;
+                    })}
                   </Form.Select>
                 </div>
                 <div className="mt-2">Initial Total: {Total()} đ</div>
@@ -353,6 +413,8 @@ export function CheckOut() {
               onClick={handleCheckout}
             ></Button>
           </CartTotals>
+          {/* <button class="enableEthereumButton" onClick={handleMetamask}>Enable Ethereum</button>
+          <button class="enableEthereumButton" onClick={sendTransaction}>Send Ethereum</button> */}
         </CheckOutStyle>
       ) : (
         <EmptyMsg />
