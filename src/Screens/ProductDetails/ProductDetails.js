@@ -13,10 +13,16 @@ import { Rating } from "../../Components/Rating/Rating";
 import { addToCart } from "../../Redux/Actions/Action";
 import { useCookies } from "react-cookie";
 import apis from "../../apis";
+import AliceCarousel from "react-alice-carousel";
+import "react-alice-carousel/lib/alice-carousel.css";
+import "./detail.css";
+import { Link } from "react-router-dom";
+import Skeleton from "@mui/material/Skeleton";
+
 export function ProductDetails() {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [cookies] = useCookies(['cookie-name']);
+  const [cookies] = useCookies(["cookie-name"]);
   const user_id = Number(cookies.user_id);
   const [error, setError] = useState(false);
   const { loading, product } = useSelector((state) => state.SingleProduct);
@@ -28,25 +34,65 @@ export function ProductDetails() {
     Color: "",
     Size: "",
     qnt: 1,
-    user_id: user_id || ""
+    user_id: user_id || "",
   });
   const [image, setImage] = useState([]);
   const [size, setSize] = useState([]);
   const [color, setColor] = useState([]);
-
-  useEffect(
-    () => dispatch(getProductWithIdAction(id)),
-    [dispatch, id]
-  );
-  const handleAddProductView = () => {
-    apis
-      .post("/addProductView", {
-        product_id: id,
-        user_id,
-      })
-  }
+  const [recommendData, setRecommendData] = useState([]);
+  console.log("------------>", recommendData);
+  const getRecommendData = async () => {
+    await apis.get(`/getRecommend/${user_id}`).then((res) => {
+      setRecommendData(res.data);
+    });
+  };
   useEffect(() => {
-    handleAddProductView()
+    getRecommendData();
+  }, []);
+
+  const responsive = {
+    0: { items: 1 },
+    568: { items: 2 },
+    1024: { items: 4 },
+  };
+  const items = recommendData.map((item) => {
+    return (
+      <Link
+        to={`/CozaStore/ProductDetails/${item.id}`}
+        key={item.id}
+        className="slide-item"
+      >
+        <div className="d-flex position-relative">
+          <img
+            src={`http://localhost:3000/${item.thumbnail}`}
+            alt="img"
+            className="image-slide"
+          />
+        </div>
+        <div className="quick-button">
+          <Button value="QUICK VIEW"></Button>
+        </div>
+        <div className="d-flex">
+          <span
+            style={{ color: "black", marginLeft: "auto", marginRight: "auto" }}
+          >
+            {item.price} đ
+          </span>
+          {/* <Rating rating={e.rating} /> */}
+        </div>
+      </Link>
+    );
+  });
+
+  useEffect(() => dispatch(getProductWithIdAction(id)), [dispatch, id]);
+  const handleAddProductView = () => {
+    apis.post("/addProductView", {
+      product_id: id,
+      user_id,
+    });
+  };
+  useEffect(() => {
+    handleAddProductView();
   }, []);
 
   useEffect(() => {
@@ -55,16 +101,16 @@ export function ProductDetails() {
         {
           original: `http://localhost:3000/${product.thumbnail}`,
           thumbnail: `http://localhost:3000/${product.thumbnail}`,
-        }
-      ]
+        },
+      ];
       for (let i = 0; i < product?.subImages.length; i++) {
         const element = product.subImages[i];
         array.push({
           original: `http://localhost:3000/${element.image}`,
           thumbnail: `http://localhost:3000/${element.image}`,
-        })
+        });
       }
-      setImage(array)
+      setImage(array);
     }
   }, [product]);
 
@@ -75,14 +121,14 @@ export function ProductDetails() {
       for (let i = 0; i < product.properties.length; i++) {
         const element = product.properties[i];
         if (!arraySize.includes(element.size)) {
-          arraySize.push(element.size)
+          arraySize.push(element.size);
         }
         if (!arrayColor.includes(element.color)) {
-          arrayColor.push(element.color)
+          arrayColor.push(element.color);
         }
       }
-     setSize(arraySize);
-     setColor(arrayColor);
+      setSize(arraySize);
+      setColor(arrayColor);
     }
   }, [product]);
 
@@ -115,7 +161,6 @@ export function ProductDetails() {
                 showPlayButton={false}
                 autoPlay={true}
               />
-              
 
               <Details>
                 <h4>{product.name}</h4>
@@ -156,6 +201,21 @@ export function ProductDetails() {
               <h3>DESCRIPTION</h3>
               <div>{product.description}</div>
             </Description>
+            <div className="container">
+              <AliceCarousel
+                autoPlay
+                autoPlayStrategy="none"
+                autoPlayInterval={2000}
+                animationDuration={2000}
+                animationType="fadeout"
+                mouseTracking
+                infinite
+                items={items}
+                disableDotsControls
+                responsive={responsive}
+                controlsStrategy="alternate"
+              />
+            </div>
           </PRODUCTDETAILS>
         </>
       )}

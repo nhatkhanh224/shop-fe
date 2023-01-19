@@ -16,8 +16,14 @@ export function CheckOut() {
   const dispatch = useDispatch();
   const [cookies] = useCookies(["cookie-name"]);
   const [checkOutProduct, setCheckOutProduct] = useState([]);
-  console.log(checkOutProduct);
   const [userData, setUserData] = useState({});
+  const [coupon, setCoupon] = useState("");
+  const [couponValue, setCouponValue] = useState({
+    id: "",
+    type: "",
+    value: 0,
+  });
+  console.log("couponValue---->", couponValue);
   const user_id = cookies.user_id;
   const getUserData = () => {
     apis.get(`/getAccount/${user_id}`).then((res) => {
@@ -33,9 +39,25 @@ export function CheckOut() {
     getUserData();
   }, []);
   const Total = () => {
-    const init = checkOutProduct.reduce((accumulator, object) => {
+    let init;
+    init = checkOutProduct.reduce((accumulator, object) => {
       return accumulator + object.quantity * object.price;
     }, 0);
+    // if (couponValue.type && couponValue.value != 0) {
+    //   if (couponValue.type == "PERCENT") {
+    //     let result = checkOutProduct.reduce((accumulator, object) => {
+    //       return accumulator + object.quantity * object.price;
+    //     }, 0);
+    //     init = result - (result * couponValue.value) / 100;
+    //   } else {
+    //     let result = checkOutProduct.reduce((accumulator, object) => {
+    //       return accumulator + object.quantity * object.price;
+    //     }, 0);
+    //     init = result - couponValue.value;
+    //   }
+    // } else {
+
+    // }
     return init;
   };
   const getCheckoutProduct = () => {
@@ -63,7 +85,7 @@ export function CheckOut() {
         .post(`/cart/minusQuantity`, {
           user_id,
           product_id,
-          product_code
+          product_code,
         })
         .then((res) => {
           getCheckoutProduct();
@@ -82,7 +104,7 @@ export function CheckOut() {
         .post(`/cart/plusQuantity`, {
           user_id,
           product_id,
-          product_code
+          product_code,
         })
         .then((res) => {
           getCheckoutProduct();
@@ -101,7 +123,7 @@ export function CheckOut() {
         .post(`/cart/deleteCart`, {
           user_id,
           product_id,
-          product_code
+          product_code,
         })
         .then((res) => {
           getCheckoutProduct();
@@ -119,17 +141,27 @@ export function CheckOut() {
   };
 
   const handleCheckout = async () => {
-    const total = Total();
+    let totalResult;
+    let discount_id;
+    if (couponValue.type && couponValue.value != 0) {
+      discount_id = couponValue.id;
+      if (couponValue.type == "PERCENT") {
+        totalResult = Total() - (Total() * couponValue.value) / 100;
+      } else {
+        totalResult = Total() - couponValue.value;
+      }
+    } else {
+      totalResult = Total();
+    }
     if (user_id) {
       try {
         await apis
           .post(`/checkout`, {
             userData,
-            total,
+            total: totalResult,
+            discount_id,
           })
-          .then(
-            window.location = "/CozaStore/History"
-          );
+          .then((window.location = "/CozaStore/History"));
       } catch (error) {
         alert(error);
       }
@@ -139,6 +171,23 @@ export function CheckOut() {
       // localStorage.setItem("carts", JSON.stringify(itemClone));
       // getCheckoutProduct();
     }
+  };
+
+  const handleApplyCoupon = async () => {
+    await apis
+      .post(`/checkCoupon`, {
+        coupon,
+      })
+      .then((res) => {
+        setCouponValue({
+          id: res.data[0].id,
+          type: res.data[0].type,
+          value: res.data[0].value,
+        });
+      })
+      .catch((error) => {
+        alert(error);
+      });
   };
 
   return (
@@ -198,7 +247,9 @@ export function CheckOut() {
                       <td>{parseFloat(e.price) * parseFloat(e.quantity)} đ</td>
                       <td>
                         <i
-                          onClick={() => handleDelete(index, e.id, e.product_code)}
+                          onClick={() =>
+                            handleDelete(index, e.id, e.product_code)
+                          }
                           className="fas fa-trash-alt"
                           style={{ cursor: "pointer" }}
                         ></i>
@@ -208,7 +259,25 @@ export function CheckOut() {
                 })}
               </tbody>
             </table>
+            <div className="p-4">
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="d-flex">
+                    <Form.Control
+                      type="text"
+                      placeholder="Coupon Code"
+                      style={{ marginRight: "10px" }}
+                      onChange={(e) => {
+                        setCoupon(e.target.value);
+                      }}
+                    />
+                    <Button value="APPLY COUPON" onClick={handleApplyCoupon} />
+                  </div>
+                </div>
+              </div>
+            </div>
           </TotalProducts>
+
           <CartTotals>
             <h4>CART TOTAL</h4>
             <div>
@@ -248,8 +317,35 @@ export function CheckOut() {
                       });
                     }}
                   />
+                  <Form.Select
+                    aria-label="Default select example"
+                    className="mt-2"
+                  >
+                    <option value="Payment on delivery">Payment on delivery</option>
+                  </Form.Select>
                 </div>
-                <div className="mt-2">Total: {Total()} đ</div>
+                <div className="mt-2">Initial Total: {Total()} đ</div>
+                {couponValue.type && couponValue.value != 0 ? (
+                  <div className="mt-2">
+                    Discount: -{" "}
+                    {couponValue.type == "PERCENT"
+                      ? couponValue.value + "%"
+                      : couponValue.value + "đ"}
+                  </div>
+                ) : (
+                  <div className="mt-2">Discount: - 0 đ</div>
+                )}
+                {couponValue.type && couponValue.value != 0 ? (
+                  <div className="mt-2">
+                    Total:{" "}
+                    {couponValue.type == "PERCENT"
+                      ? Total() - (Total() * couponValue.value) / 100
+                      : Total() - couponValue.value}{" "}
+                    đ
+                  </div>
+                ) : (
+                  <div className="mt-2">Total: {Total()} đ</div>
+                )}
               </div>
             )}
             <Button
